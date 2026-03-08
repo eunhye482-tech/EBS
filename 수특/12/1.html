@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 7-3</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 7-3</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Moral outrage is the psychological tool that motivates people to punish wrongdoers, even at cost or risk to themselves.", ko: "도덕적 분노는 설령 자신에게 비용이나 위험이 따르더라도 잘못을 저지른 사람을 처벌하도록 사람들을 동기 부여하는 심리학적 도구입니다.", voca: ["outrage:분노/격분", "motivates:동기부여하다", "wrongdoers:가해자/범법자", "at cost:비용을 치르고", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "It is a “commitment device,” something that commits people to punishment, even though trying to punish someone can be dangerous.", ko: "그것은 비록 누군가를 처벌하려는 노력이 위험할 수 있음에도 불구하고, 사람들로 하여금 처벌에 전념하게 만드는 일종의 '전념 장치'입니다.", voca: ["commitment:헌신/전념", "device:장치", "dangerous:위험한", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "When we witness unjust harm, whether someone committing interpersonal violence or obvious cheating, we have an embodied physical reaction.", ko: "누군가 대인 폭력을 행사하거나 명백한 속임수를 쓰는 등 부당한 피해를 목격할 때, 우리는 체화된 신체적 반응을 보입니다.", voca: ["witness:목격하다", "unjust:부당한", "obvious:명백한", "embodied:체화된/구현된", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We get angry, our blood pressure spikes, our heart beats faster; we thirst for retribution.", ko: "우리는 화가 나고 혈압이 치솟으며 심장이 더 빨리 뜁니다. 즉, 우리는 응징을 갈망하게 됩니다.", voca: ["spikes:치솟다", "thirst for:~을 갈망하다", "retribution:응징/보복", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Outrage leads us to ignore the irrationality of risking our own safety to punish someone.", ko: "분노는 누군가를 처벌하기 위해 자신의 안전을 위협하는 비합리성을 무시하게 만듭니다.", voca: ["ignore:무시하다", "irrationality:비합리성", "risking:위태롭게 하다", "safety:안전", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In any single situation, there is rarely an immediate personal benefit for meting out punishment, and often there is real risk, because the person you are serving justice against could lash out at you or get revenge in the future.", ko: "어떤 상황에서도 처벌을 내리는 것에 대한 즉각적인 개인적 이득은 거의 없으며, 흔히 실제적인 위험이 따릅니다. 왜냐하면 당신이 정의를 구현하려는 대상이 당신에게 달려들거나 나중에 복수할 수 있기 때문입니다.", voca: ["meting out:처벌을 내리다", "justice:정의", "lash out:달려들다", "revenge:복수", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "But the powerful feeling of outrage leads us to momentarily forget this unfavorable evaluation and get involved in a situation we would be better off avoiding, and science reveals how this feeling and forgetting is essential for maintaining a cooperative society.", ko: "하지만 분노라는 강력한 감정은 우리가 이러한 불리한 평가를 일시적으로 잊고 피하는 것이 나을 상황에 개입하게 만들며, 과학은 이러한 감정과 망각이 협력적인 사회를 유지하는 데 어떻게 필수적인지 밝혀줍니다.", voca: ["momentarily:일시적으로", "unfavorable:불리한", "essential:필수적인", "cooperative:협력적인", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Function of Outrage</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 서론: 도덕적 분노의 정의</span><div class="struct-text">자신의 위험을 무릅쓰고서라도 가해자를 처벌하게 만드는 '전념 장치'로서의 심리적 도구입니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 신체적 반응과 비합리성</span><div class="struct-text">부당함을 목격하면 혈압 상승 등 신체적 반응이 일어나며, 처벌의 위험성(비합리성)을 무시하게 됩니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 사회적 협력 유지의 핵심</span><div class="struct-text">개인에겐 손해일 수 있는 처벌 개입이 결국 사회 전체의 협력을 유지하는 필수 요소가 됩니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">사회적 협력 유지를 위한 기제로서의 도덕적 분노와 그 심리적 기능</span><span class="topic-eng">Moral outrage as a mechanism for maintaining social cooperation and its psychological function.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>
