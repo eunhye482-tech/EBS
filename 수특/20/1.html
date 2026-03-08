@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 7-11/12</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        /* 🍎 버튼 높이 및 정렬 완벽 유지 */
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: bold; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 7-11/12</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "The manager of the Humane Society was out of town for two weeks, and Elaine was placed in charge.", ko: "Humane Society의 매니저가 2주 동안 출장을 갔고, Elaine이 책임을 맡게 되었습니다.", voca: ["Humane Society:동물 보호 협회", "in charge:책임을 맡은", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Since she had taken on this responsibility before, she was familiar with the challenges she might encounter—impounding stray animals, reuniting pets with their owners, informing people their pet hadn’t been found, accepting animals from those who could no longer care for them, or turning animals away when the shelter was full.", ko: "그녀는 이전에 이 책임을 맡아본 적이 있었기 때문에, 그녀가 직면할 수 있는 난제들, 즉 유기동물 압류, 반려동물과 주인의 재회, 반려동물을 찾지 못했다는 통보, 더 이상 돌볼 수 없는 사람들로부터 동물 인수, 혹은 보호소가 꽉 찼을 때 동물을 돌려보내는 일 등에 익숙했습니다.", voca: ["responsibility:책임", "encounter:직면하다", "impounding:압류", "stray:길을 잃은/유기된", "reuniting:재회", "shelter:보호소", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Though she found the work demanding, she handled these situations with confidence and calm.", ko: "그녀는 그 일이 힘들다는 것을 알았지만, 자신감 있고 차분하게 이러한 상황들을 처리했습니다.", voca: ["demanding:힘든", "handled:처리한", "confidence:자신감", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "On the first day of the manager’s absence, everything was running smoothly until a woman arrived with a cat and asked to leave it at the shelter.", ko: "매니저가 부재한 첫날, 한 여성이 고양이를 데려와 보호소에 맡기겠다고 요청하기 전까지 모든 것이 순조롭게 진행되었습니다.", voca: ["absence:부재", "smoothly:순조롭게", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Elaine’s first question was whether the cat was a stray or not, since the shelter was obligated to take in strays but could refuse owned pets.", ko: "보호소는 유기묘는 받아들여야 할 의무가 있었지만 주인이 있는 반려동물은 거부할 수 있었기 때문에, Elaine의 첫 번째 질문은 그 고양이가 유기묘인지 아닌지였습니다.", voca: ["obligated:의무가 있는", "refuse:거부하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The woman said it was her cat and explained that she was moving and couldn’t take it with her—a common excuse.", ko: "그 여성은 자신의 고양이라고 말하며 이사를 가게 되어 데려갈 수 없다고 설명했는데, 이는 흔한 핑계였습니다.", voca: ["explained:설명했다", "excuse:변명/핑계", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Although the shelter sometimes accepted pets in such cases, it was already housing over ninety cats, nearly double its capacity of fifty, so Elaine had to politely refuse.", ko: "보호소가 그런 경우에 가끔 반려동물을 받아주기도 했지만, 이미 정원 50마리의 거의 두 배인 90마리 이상의 고양이를 수용하고 있었기에 Elaine은 정중히 거절해야 했습니다.", voca: ["housing:수용하는", "capacity:정원/수용력", "politely:정중하게", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Elaine calmly explained that there was no space available, but the woman became visibly upset and said, “If you don’t take this cat, I’ll just have to let it go somewhere.”", ko: "Elaine은 사용 가능한 공간이 없다고 차분히 설명했지만, 그 여성은 눈에 띄게 화를 내며 “당신들이 이 고양이를 받지 않으면, 난 그냥 어딘가에 내다 버려야겠네요.”라고 말했습니다.", voca: ["available:사용 가능한", "visibly:눈에 띄게", "upset:화난", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Although such statements were sadly not unusual, they always troubled Elaine. Still, she maintained professionalism, offered contact information for other shelters, and tried to help.", ko: "그런 말들이 슬프게도 드문 일은 아니었지만, 항상 Elaine을 괴롭혔습니다. 그럼에도 불구하고 그녀는 전문성을 유지하며 다른 보호소의 연락처를 제공하고 도와주려 노력했습니다.", voca: ["statements:진술/말", "unusual:특이한", "troubled:괴롭혔다", "professionalism:전문성", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The woman complained the alternatives were too far and repeated she had no other choice. Elaine then suggested the shelter might find a volunteer to transport the cat.", ko: "그 여성은 대안들이 너무 멀다고 불평하며 다른 선택지가 없다고 반복했습니다. 그러자 Elaine은 보호소에서 고양이를 운송해 줄 자원봉사자를 찾을 수도 있다고 제안했습니다.", voca: ["complained:불평했다", "alternatives:대안들", "volunteer:자원봉사자", "transport:운송하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In response, the woman, showing her frustration toward her, placed the cat’s kennel in front of her, raised her voice, and left the shelter.", ko: "이에 대응하여, 그 여성은 그녀에게 좌절감을 드러내며 고양이 이동장을 그녀 앞에 두고 목소리를 높인 뒤 보호소를 떠나버렸습니다.", voca: ["frustration:좌절/불만", "kennel:이동장/개집", "raised her voice:목소리를 높이다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Elaine could no longer hold it in. She gently put the cat in a kennel and brought it to the back isolation area.", ko: "Elaine은 더 이상 참을 수 없었습니다. 그녀는 고양이를 조심스럽게 이동장에 넣어 뒤쪽 격리 구역으로 데려갔습니다.", voca: ["hold it in:참다", "gently:조심스럽게", "isolation:격리", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Then she went to the back room and called the absent manager, who encouraged her to let it all out. Elaine shared what happened and released her emotions while the manager listened.", ko: "그런 다음 그녀는 뒷방으로 가서 부재 중인 매니저에게 전화를 걸었고, 매니저는 그녀에게 모든 것을 쏟아내라고 격려했습니다. Elaine은 일어난 일을 공유하고 감정을 해소했고 매니저는 들어주었습니다.", voca: ["encouraged:격려했다", "let it all out:모두 쏟아내다", "released:해소하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "She felt much better afterward and was relieved to have someone she could talk to without fear of judgment. Since then, the manager has encouraged staff to come to her if they need to release emotions kept in at work—and she listens.", ko: "그녀는 그 후에 기분이 훨씬 좋아졌고 판단에 대한 두려움 없이 이야기할 수 있는 누군가가 있다는 것에 안도했습니다. 그 이후로 매니저는 직원들이 직장에서 쌓인 감정을 해소해야 할 때 자신에게 오라고 격려해 왔으며, 그녀는 귀를 기울여 들어줍니다.", voca: ["relieved:안도한", "judgment:판단/비판", "staff:직원", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Emotional Support at Work</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: Elaine의 책임과 고충</span><div class="struct-text">매니저 부재 시 보호소를 맡은 Elaine은 포화 상태인 보호소 환경에서 난처한 상황에 직면합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 무책임한 주인과의 갈등</span><div class="struct-text">고양이를 유기하겠다고 협박하며 억지로 맡기고 떠난 여성으로 인해 Elaine은 큰 정서적 충격을 받습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 감정 해소와 지지의 중요성</span><div class="struct-text">매니저와의 통화를 통해 감정을 쏟아낸 Elaine은 안도감을 느끼며, 직장 내 정서적 지지 시스템의 중요성을 깨닫습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">직장 내 정서적 스트레스 해소를 위한 소통과 지지의 필요성</span><span class="topic-eng">The necessity of communication and support for releasing emotional stress at work.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

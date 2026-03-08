@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 8-7</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        /* 🍎 버튼 높이 및 정렬 완벽 유지 */
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: bold; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 8-7</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Over the past twenty years, with the arrival of digital politics, social and political protest movements have changed and become ever more prominent through what the sociologist Manuel Castells has called Networks of Outrage and Hope.", ko: "지난 20년 동안 디지털 정치의 등장과 함께, 사회적 및 정치적 항의 운동은 사회학자 Manuel Castells가 ‘분노와 희망의 네트워크’라고 부른 것을 통해 변화하고 더욱 두드러졌습니다.", voca: ["digital politics:디지털 정치", "protest:항의", "prominent:두드러진", "Networks of Outrage and Hope:분노와 희망의 네트워크", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We now have a swirling world of ‘online activism’, digital rebellion, information politics and People’s Platforms.", ko: "우리는 이제 ‘온라인 행동주의’, 디지털 반란, 정보 정치 및 민중의 플랫폼이 소용돌이치는 세상을 맞이했습니다.", voca: ["swirling:소용돌이치는", "online activism:온라인 행동주의", "rebellion:반란", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Smartphones and social networking now provide a more fluid, leaderless, participatory activism that arises more spontaneously.", ko: "스마트폰과 소셜 네트워킹은 이제 더 유동적이고, 지도자가 없으며, 더 자발적으로 발생하는 참여형 행동주의를 제공합니다.", voca: ["fluid:유동적인", "leaderless:지도자가 없는", "participatory:참여적인", "spontaneously:자발적으로", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The early examples like the Occupy Movement (2011), the Arab Spring in Egypt (2010), the Umbrella Movement in Hong Kong (2014, 2019), the Gezi Park Movement in Turkey (2013), and the Pussy Riots in Russia (2011) galvanized large numbers of people and attracted world attention.", ko: "월가 점령 운동(2011), 이집트의 아랍의 봄(2010), 홍콩의 우산 혁명(2014, 2019), 터키의 게지 공원 시위(2013), 러시아의 푸시 라이엇(2011)과 같은 초기 사례들은 수많은 사람을 규합하고 전 세계의 관심을 끌었습니다.", voca: ["galvanized:활기를 불어넣다/규합하다", "attracted:끌어모은", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "While some suggest that these new politics are enhancing democracy, others maintain that they do not really challenge the dominant power groups.", ko: "일부에서는 이러한 새로운 정치가 민주주의를 강화하고 있다고 제안하는 반면, 다른 이들은 그것들이 지배적인 권력 집단에 실제로 도전하지 못한다고 주장합니다.", voca: ["enhancing:강화하는", "democracy:민주주의", "challenge:도전하다", "dominant:지배적인", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Looking back, most of them have proved unsuccessful, clamped down upon by the state.", ko: "되돌아보면, 그것들 대부분은 국가에 의해 탄압받으며 성공하지 못한 것으로 드러났습니다.", voca: ["proved:드러난/증명된", "unsuccessful:실패한", "clamped down upon:탄압받은", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "There seems a limit to the power of new social movements.", ko: "새로운 사회 운동의 힘에는 한계가 있는 것 같습니다.", voca: ["limit:한계", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Digital Politics & Movements</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 분노와 희망의 네트워크</span><div class="struct-text">디지털 기술의 발달로 유동적이고 자발적인 '온라인 행동주의'가 사회 운동의 중심이 되었습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 세계적 사회 운동의 사례</span><div class="struct-text">아랍의 봄, 우산 혁명 등 전 세계적인 관심을 끌며 수많은 사람을 규합한 디지털 기반 운동들이 등장했습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 새로운 정치의 한계</span><div class="struct-text">민주주의 강화라는 긍정적 시각도 있으나, 실제 권력 구조를 바꾸지 못하고 국가의 탄압에 굴복하는 한계를 보였습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">디지털 기반 사회 운동의 확산과 그 정치적 영향력 및 한계 분석</span><span class="topic-eng">The expansion of digital-based social movements and the analysis of their political impact and limits.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

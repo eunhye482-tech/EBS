@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 8-6</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        /* 🍎 버튼 높이 및 정렬 완벽 유지 */
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: bold; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 8-6</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "In the context of a studio visit, the viewer might notice several clipped newspaper articles pinned to the wall, a wax-coated hotplate, walls with paint marks, resin-drizzled floors and several sculptures barely visible through their plastic wrap.", ko: "작업실 방문이라는 맥락에서, 관람객은 벽에 핀으로 고정된 여러 개의 신문 스크랩 기사, 왁스가 코팅된 핫플레이트, 페인트 자국이 있는 벽, 수지가 뚝뚝 떨어지는 바닥, 그리고 비닐 랩을 통해 간신히 보이는 여러 조각품을 발견할 수 있습니다.", voca: ["context:맥락", "clipped:스크랩된", "pinned:고정된", "resin-drizzled:수지가 흐르는", "sculptures:조각들", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Such real-world clues offer the visitor a foothold onto the artist’s oeuvre.", ko: "이러한 실제 세계의 단서들은 방문객에게 작가의 전체 작품 세계를 이해할 수 있는 발판을 제공합니다.", voca: ["clues:단서들", "foothold:발판/기반", "oeuvre:전체 작품", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The studio visitor imagines that the artist is currently a painter, who applies wax and resin and finds inspiration in particular articles.", ko: "작업실 방문객은 작가가 현재 왁스와 수지를 바르고 특정 기사에서 영감을 얻는 화가라고 상상합니다.", voca: ["imagines:상상하다", "currently:현재", "inspiration:영감", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Similarly, guests experiencing artworks in some homes notice art positioned next to furnishings, family photographs displayed on the piano and coffee-table books stacked to demonstrate preferences.", ko: "마찬가지로, 어떤 가정에서 예술 작품을 경험하는 손님들은 가구 옆에 놓인 예술품, 피아노 위에 전시된 가족사진, 그리고 취향을 보여주기 위해 쌓아둔 커피 테이블 책들을 발견하게 됩니다.", voca: ["furnishings:가구", "preferences:취향/선호", "stacked:쌓인", "positioned:위치한", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Together, these components affect particular experiences. Within the artist’s studio or collector’s home, residue from studio activities or the collector’s personal belongings help to connect the artworks to the world.", ko: "종합적으로, 이러한 요소들은 특정한 경험에 영향을 미칩니다. 작가의 작업실이나 수집가의 집 내에서, 작업 활동의 잔해나 수집가의 개인적 소지품은 예술 작품을 세상과 연결하는 데 도움을 줍니다.", voca: ["components:구성 요소", "affect:영향을 미치다", "residue:잔여물/흔적", "belongings:소지품", "connect:연결하다", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "By contrast, artworks displayed in exhibitions feel comparatively isolated, practically clipped from the world where they originated.", ko: "이와 대조적으로, 전시회에 전시된 예술 작품들은 상대적으로 고립된 느낌을 주며, 사실상 그들이 기원한 세상으로부터 잘려 나간 것 같습니다.", voca: ["by contrast:대조적으로", "comparatively:상대적으로", "isolated:고립된", "originated:기원한", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This could explain why aestheticians tend to treat artworks as singletons, rather than as members of some set.", ko: "이것은 왜 미학자들이 예술 작품을 어떤 집합의 구성원이 아니라 단독자로 취급하는 경향이 있는지를 설명해 줄 수 있습니다.", voca: ["aestheticians:미학자들", "singletons:단독자", "tend to:~하는 경향이 있다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Art and Its Environment</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 작업실의 단서들</span><div class="struct-text">작업실에 흩어진 신문 기사, 페인트 자국, 재료의 흔적들은 작가의 작품 세계를 이해하게 돕는 발판이 됩니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 일상의 맥락과 연결</span><div class="struct-text">수집가의 집에 놓인 가구, 사진 등 개인적 물품들은 작품을 현실 세계와 긴밀히 연결해 줍니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 전시실의 고립성</span><div class="struct-text">반면 전시실의 작품은 기원과 분리되어 고립된 느낌을 주며, 이는 미학자들이 작품을 단독자로 보게 만듭니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">작품이 놓인 환경적 맥락이 작품의 의미 해석과 예술 경험에 미치는 영향</span><span class="topic-eng">The influence of environmental context on the interpretation and experience of artworks.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>
