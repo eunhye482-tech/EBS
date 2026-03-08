@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 9-6</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        /* 🍎 버튼 높이 및 정렬 완벽 유지 */
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: bold; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 9-6</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "The new millennium has brought discoveries about dolphin cognition, emotion, and consciousness, creating a bridge to what is known about dolphin behavior with an emphasis on communication.", ko: "새로운 밀레니엄은 돌고래의 인지, 감정, 의식에 관한 발견을 가져왔으며, 의사소통에 중점을 둔 돌고래 행동에 대해 알려진 지식과의 가교를 형성했습니다.", voca: ["millennium:천년/밀레니엄", "cognition:인지", "consciousness:의식", "emphasis:강조", "communication:의사소통", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "New data on dolphin intelligence allow us to obtain a broader picture of the inner lives of dolphins.", ko: "돌고래 지능에 관한 새로운 데이터는 돌고래의 내면 세계에 대한 더 넓은 그림을 얻을 수 있게 해줍니다.", voca: ["intelligence:지능", "obtain:얻다", "broader:더 넓은", "inner lives:내면의 삶", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We see that dolphins exhibit sophisticated characteristics previously attributed only to humans and possibly to other higher primates.", ko: "우리는 돌고래들이 이전에는 인간이나 아마도 다른 고등 영장류에게만 속하는 것으로 여겨졌던 정교한 특성들을 보인다는 것을 알게 됩니다.", voca: ["exhibit:보이다/전시하다", "sophisticated:정교한/세련된", "characteristics:특성", "attributed to:~의 덕분으로 여겨지는", "higher primates:고등 영장류", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We know that dolphins understand syntax, semantics, and word order, and are capable of mirror-self-recognition, comprehension of pointing gestures, and understanding reference to body parts.", ko: "우리는 돌고래들이 통사론, 의미론, 어순을 이해하며, 거울 속 자신을 인식하고, 가리키는 몸짓을 이해하며, 신체 부위에 대한 언급을 이해할 수 있다는 것을 알고 있습니다.", voca: ["syntax:통사론", "semantics:의미론", "capable of:~할 수 있는", "mirror-self-recognition:거울 자아 인식", "comprehension:이해", "pointing gestures:가리키는 몸짓", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "They can identify the same abstract object using vision or echolocation.", ko: "그들은 시각이나 초음파 반사 위치 측정(echolocation)을 사용하여 동일한 추상적 물체를 식별할 수 있습니다.", voca: ["identify:식별하다", "abstract:추상적인", "echolocation:초음파 반사 위치 측정", "vision:시각", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "There is evidence that dolphins have culture.", ko: "돌고래에게 문화가 있다는 증거가 있습니다.", voca: ["evidence:증거", "culture:문화", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "For instance, killer whales have vocal dialects that are distinct to each family group and are passed down through generations; some bottlenose dolphins use sponges as tools when foraging along the sea floor.", ko: "예를 들어, 범고래는 각 가족 집단마다 뚜렷하며 세대를 거쳐 전수되는 음성 방언을 가지고 있고, 일부 큰돌고래는 해저에서 먹이를 찾을 때 스펀지를 도구로 사용합니다.", voca: ["killer whales:범고래", "vocal dialects:음성 방언", "distinct:뚜렷한/구별되는", "passed down:전수되는", "generations:세대", "bottlenose:큰돌고래", "sponges:스펀지", "tools:도구", "foraging:먹이 찾기", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Dolphin Intelligence & Culture</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 돌고래 연구의 도약</span><div class="struct-text">2000년대 이후 돌고래의 인지와 감정에 대한 발견은 돌고래 행동과 의사소통에 대한 이해의 폭을 넓혔습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 고차원적 인지 능력</span><div class="struct-text">돌고래는 어순과 의미론을 이해하고, 거울 속 자신을 알아보며, 시각과 초음파로 추상적 대상을 식별하는 정교한 능력을 갖췄습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 돌고래의 문화와 도구</span><div class="struct-text">가족별 방언을 세대 간 전수하거나 사냥 시 스펀지를 도구로 활용하는 등, 돌고래에게도 분명한 문화가 존재합니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">고등 지능과 언어적·문화적 특성을 지닌 돌고래의 정교한 내면 세계</span><span class="topic-eng">The sophisticated inner lives of dolphins with higher intelligence and cultural characteristics.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>
