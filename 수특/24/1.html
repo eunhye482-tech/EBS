@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 8-4</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        /* 🍎 버튼 높이 및 정렬 완벽 유지 */
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: bold; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 8-4</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Today’s cultural tourist is just as likely to be in search of ‘popular’, ‘everyday’ or ‘street’ culture as they are likely to visit a heritage site or a museum.", ko: "오늘날의 문화 관광객은 유적지나 박물관을 방문할 가능성만큼이나 '대중', '일상', 또는 '거리' 문화를 찾을 가능성도 큽니다.", voca: ["cultural tourist:문화 관광객", "heritage site:유적지", "everyday:일상의", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The museum seems to have lost its dominant role as a factory of meaning in (post)modern society, so cultural tourists have gone in search of meaning elsewhere.", ko: "박물관은 (포스트)모던 사회에서 의미의 공장으로서의 지배적인 역할을 잃은 것처럼 보이며, 그래서 문화 관광객들은 다른 곳에서 의미를 찾아 나섰습니다.", voca: ["dominant:지배적인", "factory of meaning:의미의 공장", "postmodern:포스트모던의", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The predominant direction of expansion has been into ‘everyday life’.", ko: "확장의 주된 방향은 '일상생활' 속으로 향해 왔습니다.", voca: ["predominant:주된", "expansion:확장", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Cultural tourism is as much based on experiencing as it is on seeing; therefore, Raymond Williams’ definitions of culture as a whole way of life as well as the arts and learning are particularly relevant here.", ko: "문화 관광은 보는 것 못지않게 경험하는 것에 기반을 두고 있습니다. 따라서 예술과 학문뿐만 아니라 삶의 전체적인 방식으로서의 문화라는 Raymond Williams의 정의가 여기서 특히 유의미합니다.", voca: ["based on:~에 기반한", "definitions:정의들", "whole way of life:삶의 전체적인 방식", "relevant:유의미한/관련된", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Past definitions of cultural tourism have placed too much emphasis on cultural tourism as a form of arts or heritage tourism in its narrowest sense; for example, visiting museums, monuments, galleries and theatres.", ko: "문화 관광에 대한 과거의 정의들은 예술 또는 좁은 의미의 유산 관광으로서의 문화 관광에 너무 많은 강조를 두었습니다. 예를 들어 박물관, 기념물, 미술관, 극장 방문 같은 것들 말이죠.", voca: ["emphasis:강조", "narrowest:가장 좁은", "monuments:기념물", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Cultural tourists are also interested in the more experiential aspects of culture.", ko: "문화 관광객들은 또한 문화의 더 경험적인 측면에도 관심이 있습니다.", voca: ["experiential:경험적인", "aspects:측면들", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In an international context, particularly in the context of indigenous or ethnic tourism, the way of life of a people can be a central focus, where the traveller is motivated primarily by first-hand, authentic or intimate contact with people whose ethnic or cultural background is different from their own.", ko: "국제적인 맥락에서, 특히 토착 문화 또는 민족 관광의 맥락에서, 한 민족의 삶의 방식이 중심 초점이 될 수 있습니다. 여기서 여행자는 자신과 민족적 또는 문화적 배경이 다른 사람들과의 직접적이고 진정성 있거나 친밀한 접촉에 의해 주로 동기를 부여받습니다.", voca: ["international context:국제적 맥락", "indigenous:토착의", "ethnic:민족의", "first-hand:직접적인", "authentic:진정한", "intimate:친밀한", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Modern Cultural Tourism</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 박물관을 벗어난 관광</span><div class="struct-text">문화 관광객들은 이제 유적지뿐만 아니라 대중문화와 거리 문화를 찾아 나섭니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 일상과 경험의 중시</span><div class="struct-text">단순히 보는 것에서 벗어나 타인의 '전체적인 삶의 방식'을 경험하는 것이 핵심 동기가 되었습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 진정성 있는 접촉</span><div class="struct-text">서로 다른 배경을 가진 사람들과의 직접적이고 친밀한 접촉이 현대 문화 관광의 중심이 되었습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">보는 관광에서 일상과 체험 중심의 진정성 있는 문화 관광으로의 변화</span><span class="topic-eng">The shift from sightseeing to experiential and authentic cultural tourism based on everyday life.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

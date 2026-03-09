@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 7-10</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        /* 🍎 버튼 높이 및 정렬 완벽 유지 */
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: bold; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 7-10</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Women’s dresses from the eighteenth century offered a great opportunity for repurposing, as they were frequently fashioned from long, uncut lengths of fabric.", ko: "18세기 여성용 드레스는 종종 자르지 않은 긴 원단으로 만들어졌기 때문에 재활용할 수 있는 좋은 기회를 제공했습니다.", voca: ["repurposing:재활용/용도변경", "fashioned:만들어진", "lengths:길이", "fabric:직물/원단", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Textiles were significantly more costly than the labor it took to alter them, and as a result, most garments were modified numerous times to keep up with changes in fashion.", ko: "직물은 그것을 고치는 데 드는 노동력보다 훨씬 비쌌으며, 그 결과 대부분의 의류는 유행의 변화에 맞추기 위해 수없이 수정되었습니다.", voca: ["textiles:직물", "significantly:상당히", "alter:고치다/변경하다", "garments:의류", "modified:수정된", "numerous:수많은", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "“Even the wealthy saved fabrics, remodeled clothes, and sold unwanted items in the secondhand market,” observes fashion scholar Linda Welters.", ko: "패션 학자인 Linda Welters는 “부유한 사람들조차 직물을 아끼고, 옷을 리모델링하고, 원하지 않는 물건을 중고 시장에 팔았다”고 말합니다.", voca: ["wealthy:부유한", "remodeled:리모델링된", "unwanted:원치 않는", "secondhand:중고의", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "“Sustainability was a way of life.” Indeed, although change is inherent to fashion, the remodeling of the existing clothing, rather than buying new, was a widespread practice.", ko: "“지속 가능성은 삶의 방식이었다.” 실제로 유행에 변화는 내재되어 있지만, 새로 사는 대신 기존 의류를 리모델링하는 것이 일반적인 관행이었습니다.", voca: ["sustainability:지속 가능성", "inherent:내재된", "existing:기존의", "widespread:널리 퍼진", "practice:관행", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "It is rare, in fact, to find an eighteenth-century dress that does not show some sign of alteration.", ko: "사실, 수선(변경)의 흔적이 보이지 않는 18세기 드레스를 찾는 것은 드문 일입니다.", voca: ["rare:드문", "sign:징후/흔적", "alteration:수선/변경", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The cost of having a gown made, or remade, was only about half the cost of the textile itself and could be significantly less, depending on the type of fabric.", ko: "가운을 만들거나 리메이크하는 비용은 직물 자체 비용의 약 절반에 불과했으며, 직물 종류에 따라 훨씬 더 적을 수도 있었습니다.", voca: ["gown:가운", "remade:다시 만들어진", "depending on:~에 따라", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In addition to updated dress silhouettes, accessories and trimmings played an important role in refreshing old clothing styles.", ko: "최신 드레스 실루엣뿐만 아니라 액세서리와 장식물도 오래된 옷 스타일을 새롭게 하는 데 중요한 역할을 했습니다.", voca: ["silhouettes:실루엣", "trimmings:장식물", "refreshing:새롭게 하는", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "For example, the addition of a row of lace on an upper part of a gown was an economical alternative to the full replacement of the gown.", ko: "예를 들어, 가운의 윗부분에 레이스 한 줄을 추가하는 것은 가운 전체를 교체하는 것에 대한 경제적인 대안이었습니다.", voca: ["economical:경제적인", "alternative:대안", "replacement:교체", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Many eighteenth-century dresses, particularly those from the first half of the century, were constructed with relatively crude stitches, indicating that the effortless deconstruction of the original gown was a consideration.", ko: "많은 18세기 드레스들, 특히 세기 전반부의 것들은 비교적 거친 바느질로 제작되었는데, 이는 원래 가운을 쉽게 해체하는 것이 고려되었음을 나타냅니다.", voca: ["relatively:비교적", "crude:거친", "stitches:바느질/땀", "deconstruction:해체", "consideration:고려", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Because fabrics retained value even when they were not in fashion, hand-woven silks, cherished for their quality and beauty, were sometimes passed down through generations.", ko: "유행이 지났을 때도 직물의 가치는 유지되었기 때문에, 품질과 아름다움으로 소중히 여겨진 수제 실크는 때때로 세대를 거쳐 전해지기도 했습니다.", voca: ["retained:유지된", "hand-woven:수제로 짠", "cherished:소중히 여겨진", "passed down:전수된", "generations:세대", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>18th Century Fashion</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 비싼 직물과 재활용 문화</span><div class="struct-text">노동력보다 직물이 훨씬 비쌌던 18세기에는 부유층조차 옷을 리모델링해 입는 것이 일상이었습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 경제적인 수선 전략</span><div class="struct-text">가운 전체를 바꾸기보다 레이스 장식이나 액세서리를 추가하여 스타일을 새롭게 했습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 해체를 고려한 제작 방식</span><div class="struct-text">나중에 쉽게 뜯어서 다시 만들 수 있도록 거칠게 바느질했으며, 고품질 실크는 대대로 물려주었습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">18세기 여성 복식의 특징: 직물의 가치 보존과 리모델링 관행</span><span class="topic-eng">Characteristics of 18th-century fashion: Preservation of textile value and remodeling practices.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

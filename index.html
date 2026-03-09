@@ -105,7 +105,17 @@
         numGroup.innerHTML = '';
         document.getElementById('num-group-container').style.display = 'block';
         const data = config[selections.book];
-        const count = (selections.type === 'normal') ? data.unitPassages : data.miniPassages;
+        
+        // 🍎 기본 문항 수 설정
+        let count = (selections.type === 'normal') ? data.unitPassages : data.miniPassages;
+        
+        // 🍎 수특 16강, 17강 예외 처리 (4개 -> 6개)
+        if (selections.book === '수특' && selections.type === 'normal') {
+            if (selections.lecture === 16 || selections.lecture === 17) {
+                count = 6;
+            }
+        }
+
         const isSuwanNormal = (selections.book === '완성' && selections.type === 'normal');
         for (let i = 1; i <= count; i++) {
             const btn = document.createElement('button');
@@ -124,18 +134,17 @@
     }
 
     function startLearning() {
-        if (!selections.lecture || !selections.num) { alert('모두 선택해주세요!'); return; }
-        
-        let folderName = selections.lecture;
-        if (selections.type === 'test') {
-            const prefix = (selections.book === '영독') ? 'minitest' : (selections.book === '수특') ? 'test' : '실전모의고사';
-            folderName = prefix + selections.lecture;
+        if (!selections.book || !selections.lecture || !selections.num) { 
+            alert('모두 선택해주세요!'); 
+            return; 
         }
         
-        // 🍎 핵심: index.html이 H3 폴더 안에 있으므로 'H3/'를 경로에서 제거
-        // 결과 예: ./영독/1/1.html
-        const finalPath = "./" + selections.book + "/" + folderName + "/" + selections.num + ".html";
-        
+        let pathLecture = selections.lecture;
+        if (selections.type === 'test') {
+            pathLecture = "TEST" + selections.lecture;
+        }
+
+        const finalPath = selections.book + "/" + pathLecture + "/" + selections.num + ".html";
         window.location.href = finalPath;
     }
 </script>

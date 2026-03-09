@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 9-5</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        /* 🍎 버튼 높이 및 정렬 완벽 유지 */
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: bold; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 9-5</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "In the probabilistic view, the typical exemplars or category members are recognized more quickly because they share more features with other category members.", ko: "확률론적 관점에서, 전형적인 표본이나 범주 구성원은 다른 범주 구성원들과 더 많은 특징을 공유하기 때문에 더 빨리 인식됩니다.", voca: ["probabilistic:확률론적인", "exemplars:표본/모범", "share features:특징을 공유하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In a sense, the typical category member is closer to the centre of the category.", ko: "어떤 의미에서, 전형적인 범주 구성원은 범주의 중심에 더 가깝습니다.", voca: ["in a sense:어떤 의미에서", "centre:중심", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "And a similar effect might be observed with the exceptional category members.", ko: "그리고 유사한 효과가 예외적인 범주 구성원들에게서도 관찰될 수 있습니다.", voca: ["observed:관찰된", "exceptional:예외적인", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "A very atypical member of a category (like bats as atypical mammals, or even as atypical birds if your category for “bird” is based on observable features) is really an outlier.", ko: "범주의 매우 비전형적인 구성원(예를 들어 비전형적인 포유류인 박쥐, 또는 '새'에 대한 범주가 관찰 가능한 특징에 기초한다면 비전형적인 새로서의 박쥐)은 실제로 아웃라이어(중심에서 벗어난 것)입니다.", voca: ["atypical:비전형적인", "mammals:포유류", "observable:관찰 가능한", "outlier:아웃라이어", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "It really is the case that the bat is a lousy member of the mammal category.", ko: "박쥐가 포유류 범주에서 형편없는 구성원인 것은 정말 사실입니다.", voca: ["lousy:형편없는", "the case:사실", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "It looks like a bird, acts like a bird, and cannot see very well.", ko: "그것은 새처럼 보이고, 새처럼 행동하며, 시력이 좋지 않습니다.", voca: ["acts:행동하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "A probabilistic categorization system would assume that bats will be misclassified and will present people with some difficulty.", ko: "확률론적 범주화 시스템은 박쥐가 잘못 분류될 것이며 사람들에게 어느 정도의 어려움을 줄 것이라고 가정할 것입니다.", voca: ["categorization:범주화", "assume:가정하다", "misclassified:잘못 분류된", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "It is plausible that our own inability to classify them readily corresponds to the fact that bats are often feared.", ko: "그것들을 즉시 분류하지 못하는 우리의 무능력이 박쥐가 종종 두려움의 대상이 된다는 사실과 일치한다는 것은 그럴듯해 보입니다.", voca: ["plausible:그럴듯한", "inability:무능력", "readily:쉽게/즉시", "corresponds:일치하다", "feared:두려워하는", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Perhaps we fear bats because they do not fit into a simple, basic category very easily.", ko: "어쩌면 우리가 박쥐를 두려워하는 이유는 그것들이 단순하고 기본적인 범주에 매우 쉽게 들어맞지 않기 때문일 것입니다.", voca: ["fit into:~에 들어맞다", "basic:기본적인", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Probabilistic View</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 핵심 원리: 특징의 공유와 인식</span><div class="struct-text">다른 구성원들과 많은 특징을 공유하는 전형적 구성원일수록 범주의 중심에 위치하며 빠르게 인식됩니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 사례: 비전형적 존재, 박쥐</span><div class="struct-text">박쥐는 포유류지만 새의 특징을 가졌기에 범주의 경계에 있는 '아웃라이어'가 되며 분류에 혼선을 줍니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 분류의 난해함과 두려움</span><div class="struct-text">우리가 박쥐를 두려워하는 이유는 그것이 명확한 범주로 쉽게 분류되지 않는 모호함을 지니고 있기 때문일 수 있습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">범주화의 확률론적 관점과 비전형적 구성원인 박쥐에 대한 심리적 반응</span><span class="topic-eng">The probabilistic view of categorization and psychological reactions to atypical members like bats.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>
