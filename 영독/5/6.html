@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 14-5</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 14-5</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Motivation has an extensive history in academic research.", ko: "동기 부여는 학술 연구에서 광범위한 역사를 가지고 있습니다.", voca: ["Motivation:동기 부여", "extensive:광범위한", "academic research:학술 연구", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Some of the earliest work on this topic was by Clark Hull, who observed that effort invested in accomplishing a goal increases as goal attainment becomes more likely.", ko: "이 주제에 관한 초기 연구 중 일부는 Clark Hull에 의해 이루어졌는데, 그는 목표 달성 가능성이 커짐에 따라 목표를 완수하기 위해 투입하는 노력이 증가한다는 점을 관찰했습니다.", voca: ["earliest work:초기 연구", "invested:투입된/투자된", "accomplishing:완수하는", "attainment:달성", "more likely:가능성이 더 높은", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Although this conclusion was drawn by observing rats running a maze to achieve a food reward—with speed increasing as distance to the food decreased—it is nevertheless useful in seeking to explain goal pursuit in humans.", ko: "이러한 결론은 먹이 보상을 얻기 위해 미로를 달리는 쥐들을 관찰함으로써(먹이까지의 거리가 줄어듦에 따라 속도가 증가함) 도출되었지만, 그럼에도 불구하고 인간의 목표 추구를 설명하는 데 유용합니다.", voca: ["conclusion:결론", "drawn:도출된", "maze:미로", "reward:보상", "nevertheless:그럼에도 불구하고", "goal pursuit:목표 추구", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Indeed, much of the modern work on motivation has built on this foundation to understand what promotes goal pursuit and achievement.", ko: "실제로 동기 부여에 관한 현대 연구의 상당 부분은 무엇이 목표 추구와 성취를 촉진하는지 이해하기 위해 이 토대 위에 세워졌습니다.", voca: ["Indeed:실제로", "foundation:토대", "promotes:촉진하다", "achievement:성취", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "For example, mirroring Hull’s rats, consumers have been shown to accelerate coffee purchases as they approach the end of a ‘10th free’ loyalty card.", ko: "예를 들어, Hull의 쥐들과 마찬가지로 소비자들은 '10번째 무료' 로열티 카드의 끝에 가까워질수록 커피 구매를 가속화한다는 것이 밝혀졌습니다.", voca: ["mirroring:~을 반영하는/모방하는", "accelerate:가속화하다", "approach:가까워지다/접근하다", "loyalty card:로열티 카드/쿠폰", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In the sports context, athletes are often observed to give ‘one last push’ as they complete a given event, and this is also often a feature both of others’ efforts to motivate them despite their fatigue, and of their own self-talk.", ko: "스포츠 맥락에서 운동선수들은 주어진 경기를 마칠 때 종종 '마지막 한 번의 박차'를 가하는 것이 관찰되는데, 이는 피로에도 불구하고 그들에게 동기를 부여하려는 타인의 노력과 그들 자신의 자기 대화 모두의 특징이기도 합니다.", voca: ["sports context:스포츠 맥락", "athletes:운동선수", "last push:마지막 박차", "fatigue:피로", "self-talk:자기 대화", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This method of motivation can also be seen when a person puts in extra effort as they reach the end of a given exercise routine.", ko: "이러한 동기 부여 방식은 사람이 주어진 운동 루틴의 끝에 도달할 때 추가적인 노력을 기울이는 모습에서도 볼 수 있습니다.", voca: ["extra effort:추가적 노력", "exercise routine:운동 루틴", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Given the centrality of motivation to success in most life domains, this topic has fascinated scholars in a range of disciplines in the social sciences, including economics and psychology.", ko: "삶의 대부분의 영역에서 성공을 위한 동기 부여의 중요성을 고려할 때, 이 주제는 경제학이나 심리학을 포함한 사회 과학의 다양한 분야의 학자들을 매료시켜 왔습니다.", voca: ["Given:~을 고려할 때", "centrality:중요성/중심성", "fascinated:매료시킨", "disciplines:학문 분야", "social sciences:사회 과학", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Goal Gradient Hypothesis</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 목표 구배 가설의 기원</span><div class="struct-text">Clark Hull은 쥐가 미로 끝의 먹이에 가까워질수록 속도가 빨라지는 현상을 관찰했습니다. 이는 목표 달성이 확실해질수록 투입하는 노력이 증가한다는 원리입니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 일상생활에서의 적용</span><div class="struct-text">소비자가 쿠폰의 마지막 칸을 채우기 위해 구매를 서두르거나, 운동선수가 결승점을 앞두고 '마지막 박차'를 가하는 것 모두 이 가설로 설명됩니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 동기 부여의 학문적 가치</span><div class="struct-text">동기 부여는 인간 성공의 핵심이기에 경제학, 심리학 등 사회 과학의 여러 분야에서 매우 중요하게 다루어지는 주제입니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">목표에 가까워질수록 동기 부여와 노력이 강화되는 '목표 구배 가설'과 그 사례</span><span class="topic-eng">The 'Goal Gradient Hypothesis' where motivation and effort increase as one approaches a goal.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

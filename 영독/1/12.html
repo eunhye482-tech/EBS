@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 11-2</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 11-2</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "For the longest time, it was debated how bees computed the distance to their nectar, but we have now figured it out.", ko: "오랫동안 꿀벌이 꿀까지의 거리를 어떻게 계산하는지에 대해 논쟁이 있었지만, 이제 우리는 그것을 알아냈습니다.", voca: ["debated:논쟁된", "computed:계산했다", "distance:거리", "nectar:꿀/꽃가루", "figured it out:알아냈다", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The bee is actually approximating distance by measuring the amount of visual stimuli it receives on the trip.", ko: "꿀벌은 실제로 비행 중에 받는 시각적 자극의 양을 측정함으로써 거리를 추정합니다.", voca: ["actually:실제로", "approximating:추정하는", "measuring:측정하는", "visual stimuli:시각적 자극", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Imagine this setup. You take a paper towel tube, split it open, and paint a bunch of tiny trees all along the inside.", ko: "이런 설정을 상상해 보십시오. 종이 타월 튜브를 가져다가 쪼개서 열고, 안쪽 전체에 작은 나무들을 많이 그립니다.", voca: ["Imagine:상상하다", "setup:설정/장치", "split it open:쪼개서 열다", "bunch of:많은/한 무리의", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Then you tape it back up and put the tube at the door of the hive so that the bees must fly through it to exit.", ko: "그런 다음 다시 테이프로 붙이고 벌들이 나가기 위해 반드시 통과해야 하도록 벌집 문에 튜브를 놓습니다.", voca: ["tape it back up:다시 테이프로 붙이다", "hive:벌집", "fly through:~을 통과해 날다", "exit:나가다/출구", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Bug scientists discovered that while the bee only flies ten inches through the tube, from its point of view, it just flew through an entire forest.", ko: "곤충 과학자들은 꿀벌이 튜브를 통해 단 10인치만 날아가지만, 벌의 관점에서는 방금 숲 전체를 날아간 것이라는 사실을 발견했습니다.", voca: ["discovered:발견했다", "point of view:관점", "entire forest:숲 전체", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "If the scientists put a nectar source right at the end of the tube, the bee would fly ten inches to it, but go back and report that there is nectar a whole forest away.", ko: "만약 과학자들이 튜브 바로 끝에 꿀 소스를 둔다면, 꿀벌은 그것까지 10인치를 날아가겠지만, 돌아가서 숲 전체 거리만큼 떨어진 곳에 꿀이 있다고 보고할 것입니다.", voca: ["nectar source:꿀 소스/원천", "report:보고하다", "whole forest away:숲 전체 거리만큼 떨어진", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This was confirmed by removing the tube, then putting tiny little RFIDs on the backs of the bees that saw the dance of the tricked bee and went on to overshoot the location by a mile.", ko: "이는 튜브를 제거한 뒤, 속은 벌의 춤을 보고 그 위치를 1마일이나 지나쳐 날아간 벌들의 등에 아주 작은 RFID를 부착함으로써 확인되었습니다.", voca: ["confirmed:확인된", "removing:제거하는", "tricked:속은", "overshoot:지나치다", "by a mile:1마일이나/훨씬 더", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "So the bee is really just a simple little robot driven by cunning algorithms.", ko: "따라서 꿀벌은 정말로 정교한 알고리즘에 의해 구동되는 단순한 작은 로봇일 뿐입니다.", voca: ["driven by:~에 의해 구동되는", "cunning:정교한/교묘한", "algorithms:알고리즘", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Bee's Distance Algorithm</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 꿀벌의 거리 측정 신비</span><div class="struct-text">꿀벌이 꿀까지의 거리를 계산하는 방식은 오랫동안 수수께끼였으나, 최근 시각적 자극을 통한 측정임이 밝혀졌습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 실험: 튜브 속의 가짜 숲</span><div class="struct-text">나무가 그려진 튜브를 통과하게 하자, 벌은 불과 10인치를 비행하고도 엄청난 양의 시각 자극 때문에 숲 전체를 날았다고 착각합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 정교한 생물학적 로봇</span><div class="struct-text">RFID 실험 결과, 동료 벌들은 속은 벌의 정보를 믿고 실제 거리를 훨씬 초과해 날아갔습니다. 벌은 정교한 알고리즘으로 작동하는 생체 로봇과 같습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">시각적 자극의 양을 측정하여 비행 거리를 계산하는 꿀벌의 알고리즘</span><span class="topic-eng">The bee's algorithm for calculating distance by measuring the amount of visual stimuli.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

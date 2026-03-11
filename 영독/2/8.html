@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 11-10</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 11-10</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Contingency implies selection and uncertainty.", ko: "우발성(contingency)은 선택과 불확실성을 수반합니다.", voca: ["Contingency:우발성/우연성", "implies:수반하다/의미하다", "selection:선택", "uncertainty:불확실성", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "It means that there are a number of possible options to choose from, and our decisions could always be different.", ko: "그것은 선택할 수 있는 수많은 가능한 옵션들이 있고, 우리의 결정은 언제나 달라질 수 있다는 것을 의미합니다.", voca: ["possible options:가능한 옵션", "decisions:결정", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "However, algorithms by definition do not know uncertainty; they do not choose between possibilities, nor are they creative, being designed to follow the instructions that program their behavior.", ko: "하지만 알고리즘은 정의상 불확실성을 모릅니다. 그것들은 가능성들 사이에서 선택하지 않으며 창의적이지도 않은데, 자신의 행동을 프로그래밍하는 지침을 따르도록 설계되었기 때문입니다.", voca: ["by definition:정의상", "creative:창의적인", "instructions:지침", "program:프로그래밍하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In this sense, algorithms are not contingent—which is why they can operate so efficiently and reliably.", ko: "이런 의미에서 알고리즘은 우발적이지 않으며, 이것이 알고리즘이 그토록 효율적이고 신뢰성 있게 작동할 수 있는 이유입니다.", voca: ["In this sense:이런 의미에서", "operate:작동하다", "efficiently:효율적으로", "reliably:신뢰성 있게", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Just like traditional machines, we expect algorithms to be neither unpredictable nor idiosyncratic, even when they deliver information.", ko: "전통적인 기계와 마찬가지로, 우리는 알고리즘이 정보를 전달할 때조차 예측 불가능하지도 않고 특이하지도 않기를 기대합니다.", voca: ["traditional machines:전통적 기계", "unpredictable:예측 불가능한", "idiosyncratic:특이한/기벽이 있는", "deliver:전달하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Different watches should all indicate the same time to all users, if they work properly.", ko: "서로 다른 시계들은 제대로 작동한다면 모든 사용자에게 똑같은 시간을 가리켜야 합니다.", voca: ["indicate:가리키다/나타내다", "properly:제대로/적절히", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "As von Foerster observed, if the outcome of a traditional machine becomes unpredictable, we do not think that it is creative or original—we think that it is broken.", ko: "von Foerster가 관찰했듯이, 전통적인 기계의 결과가 예측 불가능해지면 우리는 그것이 창의적이거나 독창적이라고 생각하지 않고, 고장 났다고 생각합니다.", voca: ["observed:관찰했다", "outcome:결과", "original:독창적인", "broken:고장 난", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We do not care about the moods nor the perspectives of machines, only about their results.", ko: "우리는 기계의 기분이나 관점에는 관심이 없으며, 오직 그 결과에만 관심이 있습니다.", voca: ["moods:기분", "perspectives:관점", "results:결과", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We repair them precisely to restore their predictability.", ko: "우리는 정확히 기계의 예측 가능성을 복원하기 위해 기계를 수리합니다.", voca: ["precisely:정확히", "restore:복원하다", "predictability:예측 가능성", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Predictability of Algorithms</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 인간의 우발성 vs 알고리즘</span><div class="struct-text">인간의 선택은 불확실성과 우발성을 수반하지만, 알고리즘은 정해진 지침을 따르도록 설계되어 불확실성을 배제합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 기계적 일관성의 기대</span><div class="struct-text">시계가 모두 같은 시간을 가리켜야 하듯, 우리는 알고리즘이 예측 가능하고 일관된 정보를 제공하기를 기대합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 고장과 수리의 본질</span><div class="struct-text">기계의 결과가 예측 불가능해지면 우리는 이를 '독창성'이 아닌 '고장'으로 간주하며, 예측 가능성을 복원하기 위해 수리합니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">알고리즘과 전통적 기계에서 기대되는 철저한 예측 가능성과 비우발성</span><span class="topic-eng">The strict predictability and non-contingency expected from algorithms and traditional machines.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

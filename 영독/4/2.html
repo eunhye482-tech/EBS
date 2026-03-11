@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 13-2</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 13-2</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Central to the notion of brilliant leadership is the critical linkage between empathy and authenticity.", ko: "훌륭한 리더십 개념의 중심에는 공감과 진정성 사이의 결정적인 연결 고리가 있습니다.", voca: ["notion:개념/생각", "brilliant:훌륭한/빛나는", "critical linkage:결정적인 연결 고리", "empathy:공감", "authenticity:진정성", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "While leaders may act on the premise that sensitivity to employee concerns is helpful in achieving organizational goals, brilliant leaders believe that empathy has value in its own right.", ko: "리더들은 직원의 관심사에 대한 세심함이 조직의 목표를 달성하는 데 도움이 된다는 전제하에 행동할 수도 있지만, 훌륭한 리더는 공감이 그 자체로 가치가 있다고 믿습니다.", voca: ["premise:전제", "sensitivity:세심함/민감성", "concerns:관심사/우려", "achieving:달성하는", "organizational goals:조직 목표", "in its own right:그 자체로", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In this regard, empathy is less a means to an end (e.g., profiting) but rather is consistent with Kant’s notion of “Character,” which underscores truthfulness as a core element of virtue.", ko: "이런 점에서 공감은 목적(예를 들어, 이익 창출)을 위한 수단이라기보다는, 진실함을 덕의 핵심 요소로 강조하는 칸트의 “성품” 개념과 일치합니다.", voca: ["In this regard:이런 점에서", "means to an end:목적을 위한 수단", "consistent with:~와 일치하는", "underscores:강조하다", "truthfulness:진실함", "core element:핵심 요소", "virtue:덕/미덕", "🍎", "🍎", "🍎"] },
+        { en: "From a stakeholder perspective, particularly employees, brilliant leaders would be seen as behaving in ways that reveal a genuineness of motives.", ko: "이해관계자, 특히 직원의 관점에서 볼 때, 훌륭한 리더는 동기의 순수함을 드러내는 방식으로 행동하는 것으로 보일 것입니다.", voca: ["stakeholder:이해관계자", "perspective:관점", "reveal:드러내다", "genuineness:순수함/진실성", "motives:동기", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Guided by the deontologically-based philosophical guidepost, “We should do our duty for no other reason than because it’s the right thing to do,” the brilliant leader’s empathetic conduct is derived less from strategic or tactical interests than it is from one’s personal sense of integrity.", ko: "“우리는 그것이 옳은 일이기 때문이라는 이유 외에 다른 이유 없이 의무를 행해야 한다”라는 의무론에 근거한 철학적 지표에 따라, 훌륭한 리더의 공감적인 행위는 전략적이나 전술적인 이익보다는 개인적인 청렴함에서 비롯됩니다.", voca: ["deontologically:의무론적으로", "guidepost:지표", "empathetic conduct:공감적 행위", "derived from:~에서 비롯된", "strategic:전략적인", "tactical:전술적인", "integrity:청렴/고결", "🍎", "🍎", "🍎"] },
+        { en: "That, then, is a defining feature of authenticity: it frames empathy as values-driven rather than outcome-driven.", ko: "그렇다면 그것이 바로 진정성의 규정적인 특징입니다. 즉, 그것은 공감을 결과 중심이라기보다는 가치 중심적인 것으로 틀을 잡습니다.", voca: ["defining feature:규정적인 특징", "frames:틀을 잡다", "values-driven:가치 중심적인", "outcome-driven:결과 중심적인", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Empathy and Authenticity</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 공감과 진정성의 연결</span><div class="struct-text">훌륭한 리더십의 핵심은 공감을 도구가 아닌 그 자체로 가치 있는 덕목으로 여기는 진정성에 있습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 수단이 아닌 목적으로서의 공감</span><div class="struct-text">이익 창출을 위한 전략적 수단이 아니라, 진실함을 강조하는 칸트의 '성품' 개념처럼 리더의 내면적 고결함에서 공감이 비롯됩니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 가치 중심적 리더십</span><div class="struct-text">진정한 리더는 의무론적 신념에 따라 옳은 일을 행하며, 이는 공감을 '결과'가 아닌 '가치'에 의해 움직이는 것으로 규정합니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">전략적 수단을 넘어 리더의 진정성과 고결함에서 비롯되는 가치 중심적 공감</span><span class="topic-eng">Value-driven empathy derived from a leader's authenticity and integrity rather than strategic means.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

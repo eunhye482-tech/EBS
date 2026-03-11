@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 10-10</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 10-10</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "The phrase “image scanning” refers to the cognitive processes that operate on visual mental images when a person moves his or her attention across imagined objects.", ko: "“이미지 스캐닝”이라는 구절은 사람이 상상된 대상 전체로 주의를 옮길 때 시각적 정신 이미지에 작용하는 인지 과정을 지칭합니다.", voca: ["image scanning:이미지 스캐닝", "refers to:~을 지칭하다", "cognitive processes:인지 과정", "visual mental images:시각적 정신 이미지", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The first image scanning paradigm was designed to investigate the spatial properties of images.", ko: "최초의 이미지 스캐닝 패러다임은 이미지의 공간적 특성을 조사하기 위해 설계되었습니다.", voca: ["paradigm:패러다임", "designed:설계된", "investigate:조사하다", "spatial properties:공간적 특성", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In the original experiment, participants memorized drawings of elongated objects (such as a tower).", ko: "원래의 실험에서, 참가자들은 (탑과 같은) 길쭉한 물체의 그림을 암기했습니다.", voca: ["original:원래의", "experiment:실험", "memorized:암기한", "elongated:길쭉한", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "They were then asked to visualize one of the objects and to focus at one of its ends (for example, the bottom of the tower).", ko: "그들은 그러고 나서 그 물체 중 하나를 시각화하고 그 끝부분 중 하나(예를 들어, 탑의 하단)에 초점을 맞추도록 요청받았습니다.", voca: ["visualize:시각화하다", "focus:초점/집중", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Lastly, participants heard the name of a feature on the object (e.g., a flag), and they had to look for it.", ko: "마지막으로, 참가자들은 물체의 특징 이름(예: 깃발)을 들었고, 그것을 찾아야 했습니다.", voca: ["feature:특징", "look for:~을 찾다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Participants were not instructed to scan their image, but were simply told to focus on the original location until the probe was delivered, and then to focus on the named part or feature.", ko: "참가자들은 자신의 이미지를 스캔하라는 지시를 받지는 않았지만, 탐색 단서(probe)가 주어질 때까지 원래 위치에 초점을 맞추고, 그다음 이름이 언급된 부분이나 특징에 초점을 맞추라는 말을 들었습니다.", voca: ["instructed:지시받은", "probe:탐색 단서/조사", "delivered:전달된", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "They pressed one button when they had focused on the named part, and another button if they failed to find it.", ko: "그들은 언급된 부분에 초점을 맞추었을 때 한 버튼을 눌렀고, 찾지 못했을 때 다른 버튼을 눌렀습니다.", voca: ["pressed:눌렀다", "failed to:~하지 못하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The critical finding was that response times increased linearly with increasing distances from the focus point to the named part of the object.", ko: "결정적인 발견은 반응 시간이 초점 지점에서 물체의 언급된 부분까지의 거리가 증가함에 따라 선형적으로 증가했다는 것이었습니다.", voca: ["critical:결정적인", "response times:반응 시간", "linearly:선형적으로", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This finding was taken as evidence that distance, as traversed by image scanning, is genuinely represented in visual mental images.", ko: "이 발견은 이미지 스캐닝에 의해 가로질러지는 거리가 시각적 정신 이미지 내에 진정으로 표상된다는 증거로 받아들여졌습니다.", voca: ["evidence:증거", "traversed:가로질러지는", "genuinely:진정으로", "represented:표상된", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Spatial Nature of Mental Images</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 이미지 스캐닝의 정의</span><div class="struct-text">정신적 이미지 속에서 주의를 옮기는 '이미지 스캐닝'은 우리 마음속 이미지가 어떤 공간적 특성을 갖는지 보여줍니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 실험: 주의 이동과 반응 시간</span><div class="struct-text">참가자들에게 물체를 시각화하게 한 뒤 특정 부분으로 주의를 옮기게 한 결과, 두 지점 사이의 실제 거리가 멀수록 반응 시간도 길어졌습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 정신적 표상의 공간성</span><div class="struct-text">반응 시간이 거리와 선형적으로 비례한다는 사실은, 우리 뇌가 정신적 이미지를 구축할 때 실제 공간의 '거리' 개념을 그대로 반영하고 있음을 입증합니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">시각적 정신 이미지 내 거리의 공간적 표상을 입증하는 이미지 스캐닝 연구</span><span class="topic-eng">Image scanning research demonstrating the spatial representation of distance in visual mental images.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

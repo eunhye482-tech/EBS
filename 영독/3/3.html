@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 12-4</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 12-4</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Culturally shared views of the self have been suggested to have profound influences on basic attention processes.", ko: "자아에 대한 문화적으로 공유된 관점은 기본적인 주의 집중 과정에 지대한 영향을 미치는 것으로 시사되어 왔습니다.", voca: ["Culturally shared:문화적으로 공유된", "profound:지대한/심오한", "influences:영향", "attention processes:주의 과정", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In Western cultures, individuals are encouraged to discover their internal attributes such as desires and personal goals, and therefore they may be expected to focus their attention on events that are relevant to such desires and goals.", ko: "서구 문화에서 개인은 욕구와 개인적 목표와 같은 내부적 속성을 발견하도록 장려되며, 따라서 그러한 욕구 및 목표와 관련된 사건에 주의를 집중할 것으로 기대될 수 있습니다.", voca: ["internal attributes:내부적 속성", "desires:욕구", "relevant to:~과 관련된", "expected:기대되는", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "As a result, their attention may become focused.", ko: "그 결과, 그들의 주의는 집중될 수 있습니다.", voca: ["As a result:그 결과", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This cognitive style, which is anchored in a focal object in lieu of its context, has been called analytic.", ko: "맥락 대신 핵심 사물에 고정된 이러한 인지 양식은 '분석적'이라고 불려 왔습니다.", voca: ["cognitive style:인지 양식", "anchored:고정된/닻을 내린", "focal object:핵심 사물", "in lieu of:~ 대신에", "analytic:분석적인", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In contrast, in Eastern cultures individuals are more attuned to various aspects of ever-important social relations and, as a consequence, they may be expected to attend more broadly to a focal object as well as to its surrounding context, drawing inferences about the relationship between the object and its context.", ko: "대조적으로, 동양 문화에서 개인은 언제나 중요한 사회적 관계의 다양한 측면에 더 익숙하며, 그 결과 핵심 사물뿐만 아니라 주변 맥락에도 더 넓게 주의를 기울여 사물과 맥락 사이의 관계에 대한 추론을 이끌어낼 것으로 기대될 수 있습니다.", voca: ["In contrast:대조적으로", "attuned to:~에 익숙한", "social relations:사회적 관계", "drawing inferences:추론을 끌어내다", "context:맥락", "relationship:관계", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This mode of cognition has been called holistic.", ko: "이러한 인지 모드는 '총체적'이라고 불려 왔습니다.", voca: ["mode of cognition:인지 모드", "holistic:총체적인", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "These predictions have been borne out.", ko: "이러한 예측은 사실임이 입증되었습니다.", voca: ["predictions:예측", "borne out:입증된/사실로 판명된", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "For example, when presented with an animated vignette of an underwater scene and subsequently asked to remember what they saw, European Americans were more likely to recall focal objects, whereas Japanese were more likely to refer to contextual information as well as relationships between the focal objects.", ko: "예를 들어, 수중 장면의 애니메이션을 보여주고 나중에 본 것을 기억해 보라고 했을 때, 유럽계 미국인은 핵심 사물을 기억할 가능성이 더 높았던 반면, 일본인은 핵심 사물들 사이의 관계뿐만 아니라 맥락 정보도 언급할 가능성이 더 높았습니다.", voca: ["vignette:장면/삽화", "subsequently:그 후에", "recall:기억해내다", "whereas:~인 반면에", "refer to:~을 언급하다", "contextual information:맥락 정보", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Culture and Cognitive Style</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 서구: 분석적(Analytic) 인지 양식</span><div class="struct-text">개인의 욕구와 목표를 중시하는 서구 문화는 맥락보다는 핵심 사물 자체에 주의를 집중시키는 경향이 있습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 동양: 총체적(Holistic) 인지 양식</span><div class="struct-text">사회적 관계를 중시하는 동양 문화는 사물과 그 주변 맥락, 그리고 둘 사이의 관계까지 넓게 파악하는 특징이 있습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 사례: 수중 장면 실험 결과</span><div class="struct-text">수중 애니메이션을 본 후 미국인은 물고기 같은 핵심 사물을, 일본인은 배경이나 사물 간의 관계를 더 잘 기억해냄으로써 이러한 인지 차이가 입증되었습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">문화적 자기관에 의해 형성되는 분석적(서구) 및 총체적(동양) 주의 집중 방식의 차이</span><span class="topic-eng">The difference between analytic (Western) and holistic (Eastern) attention processes shaped by cultural views of the self.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 13-8</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 13-8</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Scientific progress is measured not only by an increase in understanding but by an increase in control over nature and redirection of nature’s course.", ko: "과학적 진보는 이해의 증가뿐만 아니라 자연에 대한 통제력의 증가와 자연의 과정에 대한 방향 전환에 의해서도 측정됩니다.", voca: ["Scientific progress:과학적 진보", "measured:측정되는", "increase:증가", "control over nature:자연에 대한 통제", "redirection:방향 전환", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "“The contemplative ideal of scientific investigations for their own sake has been replaced in modern times,” Wieland comments, “by the practical ideal of scientific research in the service of humanity.”", ko: "Wieland는 “과학적 조사 그 자체를 위한 관조적 이상은 현대에 들어 인류를 위한 과학 연구의 실용적 이상으로 대체되었습니다”라고 언급합니다.", voca: ["contemplative ideal:관조적 이상", "investigations:조사", "for their own sake:그 자체를 위해", "practical ideal:실용적 이상", "in the service of:~을 위하여/봉사하여", "humanity:인류", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The natural course of things once presented and still presents threats to human welfare: people went and still go hungry, die in infancy and early adulthood, and face natural disasters.", ko: "자연적인 일의 과정은 예전에도 그랬고 지금도 인류의 복지에 위협을 줍니다. 즉, 사람들은 굶주리고, 유아기나 성인 초기에 사망하며, 자연재해에 직면합니다.", voca: ["presents:제시하다/가져다주다", "threats:위협", "human welfare:인류 복지", "infancy:유아기", "early adulthood:성인 초기", "natural disasters:자연재해", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "But not all control and redirection add to human welfare.", ko: "하지만 모든 통제와 방향 전환이 인류 복지를 증진시키는 것은 아닙니다.", voca: ["add to:~을 늘리다/증진시키다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Medical technology, based on science, has lengthened the number of years human beings suffer from chronic diseases, condemning them to lonely, bedridden existences.", ko: "과학에 기반한 의료 기술은 인간이 만성 질환으로 고통받는 햇수를 연장시켜, 그들을 외롭고 침대에 누워만 있어야 하는 존재로 만들었습니다.", voca: ["Medical technology:의료 기술", "lengthened:연장했다", "chronic diseases:만성 질환", "condemning:처하게 하는", "bedridden:침대에 누워만 있는", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "End-of-life treatments, which prove medical innovation and competence, can sustain life, but not living.", ko: "의료 혁신과 능력을 입증하는 생애 말기 치료는 생명을 유지할 수는 있지만, 삶(생활)을 유지할 수는 없습니다.", voca: ["End-of-life treatments:생애 말기 치료", "innovation:혁신", "competence:능력", "sustain:유지하다", "Living:삶/생활", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The illustrious medical journal The Lancet reports frequently on the “sea of suffering” in aging populations.", ko: "저명한 의학 저널인 ‘The Lancet’은 고령화 인구의 “고통의 바다”에 대해 빈번하게 보고합니다.", voca: ["illustrious:저명한", "frequently:빈번하게", "sea of suffering:고통의 바다", "aging populations:고령화 인구", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Dilemma of Progress</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 과학의 실용적 전환</span><div class="struct-text">현대 과학은 관조적인 탐구보다는 인류의 복지를 증진하기 위해 자연을 통제하고 방향을 전환하는 실용적 목적에 집중합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 자연의 위협과 과학적 대응</span><div class="struct-text">기아, 조기 사망, 자연재해 등 인류의 안녕을 위협하는 자연적 현상에 맞서 과학은 눈부신 성과를 거두었습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 의료 발전의 역설</span><div class="struct-text">의료 기술은 생명을 연장했지만, 동시에 고통스러운 만성 질환의 기간도 늘렸습니다. 생명 유지(sustain life)가 곧 진정한 삶(living)을 의미하는 것은 아닙니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">인류 복지를 위한 과학적 통제와 의료 기술 발전이 초래한 삶의 질에 대한 역설적 결과</span><span class="topic-eng">The paradoxical results of scientific control and medical advancement on the quality of life despite increasing human longevity.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

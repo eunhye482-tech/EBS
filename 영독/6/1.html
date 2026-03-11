@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master - EBS 9-7</title>
+    <title>English Master - EBS 9-6</title>
     <style>
         :root { 
             --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
@@ -47,7 +47,7 @@
 </head>
 <body>
 <div class="phone-container">
-    <div class="header" id="header-title">English Master - EBS 9-7</div>
+    <div class="header" id="header-title">English Master - EBS 9-6</div>
     <div id="display-area"></div>
     <div id="nav-area" class="nav-btns-fixed hidden">
         <button class="btn-prev" onclick="prevSentence()">PREV</button>
@@ -56,11 +56,13 @@
 </div>
 <script>
     const fullData = [
-        { en: "The inability of arms suppliers to control the uses to which their military hardware will be put is troubling.", ko: "무기 공급업체들이 자신들의 군사 장비가 사용될 용도를 통제하지 못하는 능력의 부재는 우려스러운 일입니다.", voca: ["inability:무능력/부재", "arms suppliers:무기 공급업체", "military hardware:군사 장비", "troubling:우려스러운", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Friends can become enemies, and supplying weapons can backfire—generating what the CIA calls blowback to describe what can happen when foreign activities such as covert shipments of arms are later used in retaliations against the supplier.", ko: "친구였던 이들이 적이 될 수 있으며, 무기 공급은 역효과를 낼 수 있습니다. CIA는 무기의 은밀한 선적과 같은 해외 활동이 나중에 공급업체에 대한 보복에 사용될 때 일어날 수 있는 일을 설명하기 위해 이를 '블로우백(blowback)'이라고 부릅니다.", voca: ["backfire:역효과를 내다", "blowback:블로우백/역류", "covert:은밀한", "shipments:선적/수송", "retaliations:보복", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "The United States learned this painful lesson the hard way. The weapons it shipped to Iraq when Saddam Hussein was fighting Iran in the 1980s were later used against U.S. forces in the Persian Gulf War.", ko: "미국은 이 고통스러운 교훈을 힘들게 배웠습니다. 1980년대 사담 후세인이 이란과 싸울 때 이라크에 보냈던 무기들이 나중에 걸프 전쟁에서 미군을 상대로 사용되었습니다.", voca: ["painful lesson:고통스러운 교훈", "the hard way:힘들게/어렵게", "Persian Gulf War:걸프 전쟁", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "This also happened when the Stinger missiles the United States supplied to Taliban forces resisting the Soviet Union’s 1979 invasion in Afghanistan fell into the hands of terrorists later opposing the United States.", ko: "이런 일은 미국이 1979년 소련의 아프가니스탄 침공에 저항하는 탈레반 세력에게 공급한 스팅어 미사일이 나중에 미국에 반대하는 테러리스트들의 손에 들어갔을 때도 일어났습니다.", voca: ["resisting:저항하는", "invasion:침공", "fell into the hands of:~의 손에 들어가다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Likewise, in 1982, Great Britain found itself shipping military equipment to Argentina just eight days before Argentina’s attack on the British-controlled Falkland Islands; and in 1998, U.S. military technology sold to China was exported to Pakistan, making possible its nuclear weapons test.", ko: "마찬가지로 1982년 영국은 아르헨티나가 영국 지배하의 포클랜드 제도를 공격하기 불과 8일 전에 아르헨티나에 군사 장비를 선적하고 있음을 알게 되었습니다. 또한 1998년 중국에 판매된 미국의 군사 기술이 파키스탄으로 수출되어 파키스탄의 핵무기 실험을 가능하게 했습니다.", voca: ["Likewise:마찬가지로", "military equipment:군사 장비", "Falkland Islands:포클랜드 제도", "nuclear weapons:핵무기", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+        { en: "The new millennium has brought discoveries about dolphin cognition, emotion, and consciousness, creating a bridge to what is known about dolphin behavior with an emphasis on communication.", ko: "새로운 밀레니엄은 돌고래의 인지, 감정, 의식에 관한 발견을 가져왔으며, 의사소통에 중점을 둔 돌고래 행동에 대해 알려진 지식과의 가교를 형성했습니다.", voca: ["millennium:천년/밀레니엄", "cognition:인지", "consciousness:의식", "emphasis:강조", "communication:의사소통", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "New data on dolphin intelligence allow us to obtain a broader picture of the inner lives of dolphins.", ko: "돌고래 지능에 관한 새로운 데이터는 돌고래의 내면 세계에 대한 더 넓은 그림을 얻을 수 있게 해줍니다.", voca: ["intelligence:지능", "obtain:얻다", "broader:더 넓은", "inner lives:내면의 삶", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We see that dolphins exhibit sophisticated characteristics previously attributed only to humans and possibly to other higher primates.", ko: "우리는 돌고래들이 이전에는 인간이나 아마도 다른 고등 영장류에게만 속하는 것으로 여겨졌던 정교한 특성들을 보인다는 것을 알게 됩니다.", voca: ["exhibit:보이다/전시하다", "sophisticated:정교한/세련된", "characteristics:특성", "attributed to:~의 덕분으로 여겨지는", "higher primates:고등 영장류", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We know that dolphins understand syntax, semantics, and word order, and are capable of mirror-self-recognition, comprehension of pointing gestures, and understanding reference to body parts.", ko: "우리는 돌고래들이 통사론, 의미론, 어순을 이해하며, 거울 속 자신을 인식하고, 가리키는 몸짓을 이해하며, 신체 부위에 대한 언급을 이해할 수 있다는 것을 알고 있습니다.", voca: ["syntax:통사론", "semantics:의미론", "capable of:~할 수 있는", "mirror-self-recognition:거울 자아 인식", "comprehension:이해", "pointing gestures:가리키는 몸짓", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "They can identify the same abstract object using vision or echolocation.", ko: "그들은 시각이나 초음파 반사 위치 측정(echolocation)을 사용하여 동일한 추상적 물체를 식별할 수 있습니다.", voca: ["identify:식별하다", "abstract:추상적인", "echolocation:초음파 반사 위치 측정", "vision:시각", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "There is evidence that dolphins have culture.", ko: "돌고래에게 문화가 있다는 증거가 있습니다.", voca: ["evidence:증거", "culture:문화", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "For instance, killer whales have vocal dialects that are distinct to each family group and are passed down through generations; some bottlenose dolphins use sponges as tools when foraging along the sea floor.", ko: "예를 들어, 범고래는 각 가족 집단마다 뚜렷하며 세대를 거쳐 전수되는 음성 방언을 가지고 있고, 일부 큰돌고래는 해저에서 먹이를 찾을 때 스펀지를 도구로 사용합니다.", voca: ["killer whales:범고래", "vocal dialects:음성 방언", "distinct:뚜렷한/구별되는", "passed down:전수되는", "generations:세대", "bottlenose:큰돌고래", "sponges:스펀지", "tools:도구", "foraging:먹이 찾기", "🍎"] }
     ];
 
     let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
@@ -69,13 +71,13 @@
         const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
         if (currentMode === 'INTRO') {
             header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
-            area.innerHTML = `<div class="main-title-card"><h1>The Risk of 'Blowback'</h1></div>
+            area.innerHTML = `<div class="main-title-card"><h1>Dolphin Intelligence & Culture</h1></div>
                 <div class="structure-container">
-                    <div class="struct-item"><span class="struct-label">📍 개념: 블로우백(Blowback)</span><div class="struct-text">무기 공급 등 은밀한 해외 지원 활동이 나중에 공급자에게 보복으로 돌아오는 현상을 말합니다.</div></div>
-                    <div class="struct-item"><span class="struct-label">📍 사례 1: 미국의 뼈아픈 경험</span><div class="struct-text">이라크에 보낸 무기가 걸프전에서 미군을 공격하고, 탈레반에게 준 미사일이 테러리스트의 손에 들어갔습니다.</div></div>
-                    <div class="struct-item"><span class="struct-label">📍 사례 2: 영국과 기술 수출</span><div class="struct-text">영국은 공격 직전의 적국에 장비를 보냈으며, 미국 기술이 제3국으로 흘러가 핵실험에 이용되기도 했습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 도입: 돌고래 연구의 도약</span><div class="struct-text">2000년대 이후 돌고래의 인지와 감정에 대한 발견은 돌고래 행동과 의사소통에 대한 이해의 폭을 넓혔습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 고차원적 인지 능력</span><div class="struct-text">돌고래는 어순과 의미론을 이해하고, 거울 속 자신을 알아보며, 시각과 초음파로 추상적 대상을 식별하는 정교한 능력을 갖췄습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 돌고래의 문화와 도구</span><div class="struct-text">가족별 방언을 세대 간 전수하거나 사냥 시 스펀지를 도구로 활용하는 등, 돌고래에게도 분명한 문화가 존재합니다.</div></div>
                 </div>
-                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">무기 공급의 통제 불능성과 그로 인한 역효과 및 역사적 사례</span><span class="topic-eng">The lack of control over arms supply and its negative consequences with historical cases.</span></div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">고등 지능과 언어적·문화적 특성을 지닌 돌고래의 정교한 내면 세계</span><span class="topic-eng">The sophisticated inner lives of dolphins with higher intelligence and cultural characteristics.</span></div>
                 <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
         } else {
             const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');

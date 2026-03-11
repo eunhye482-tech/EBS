@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 12-9</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 12-9</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "The key to unlocking the agricultural potential of Mesopotamia lay in irrigation.", ko: "메소포타미아의 농업 잠재력을 실현하는 열쇠는 관개에 있었습니다.", voca: ["key:열쇠/비결", "unlocking:실현하는/여는", "agricultural:농업의", "potential:잠재력", "irrigation:관개", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Early Mesopotamians, particularly the Sumerians, were pioneers in developing sophisticated irrigation techniques.", ko: "초기 메소포타미아인들, 특히 수메르인들은 정교한 관개 기술을 개발하는 데 선구자였습니다.", voca: ["particularly:특히", "Sumerians:수메르인", "pioneers:선구자", "sophisticated:정교한", "techniques:기술", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "They constructed canals, dikes, and reservoirs to control the flow of the rivers, diverting water to their fields during dry periods and protecting their settlements from floods.", ko: "그들은 강의 흐름을 조절하기 위해 운하, 제방, 저수지를 건설하여, 건기에는 물을 들판으로 돌리고 홍수로부터는 정착지를 보호했습니다.", voca: ["constructed:건설했다", "canals:운하", "dikes:제방", "reservoirs:저수지", "diverting:돌리는/전환하는", "settlements:정착지", "floods:홍수", "🍎", "🍎", "🍎"] },
+        { en: "This monumental effort required cooperation and organization on a scale previously unseen, leading to the development of complex social structures and the rise of powerful city-states.", ko: "이러한 기념비적인 노력은 이전에 볼 수 없었던 규모의 협력과 조직을 필요로 했으며, 이는 복잡한 사회 구조의 발달과 강력한 도시 국가의 부상으로 이어졌습니다.", voca: ["monumental:기념비적인", "cooperation:협력", "organization:조직", "previously:이전에", "city-states:도시 국가", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Early irrigation was relatively small-scale, involving the digging of simple channels to divert water to nearby fields.", ko: "초기 관개는 비교적 소규모였으며, 인근 들판으로 물을 돌리기 위해 간단한 수로를 파는 작업을 포함했습니다.", voca: ["relatively:비교적", "small-scale:소규모의", "channels:수로/경로", "nearby:인근의", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Over time, these systems became more elaborate, with complex networks of canals spanning vast distances.", ko: "시간이 지나면서 이러한 시스템은 더욱 정교해졌으며, 광대한 거리에 걸쳐 복잡한 운하망이 형성되었습니다.", voca: ["elaborate:정교한", "networks:망/네트워크", "spanning:걸쳐 있는", "vast distances:광대한 거리", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The construction and maintenance of these systems required a significant labor force, which was often organized and directed by temple priests or powerful leaders.", ko: "이러한 시스템의 건설과 유지 관리에는 상당한 노동력이 필요했으며, 이는 흔히 신전 사제들이나 강력한 지도자들에 의해 조직되고 지휘되었습니다.", voca: ["maintenance:유지 관리", "significant:상당한/중요한", "labor force:노동력", "directed:지휘되는", "priests:사제", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This centralized control over water resources provided a basis for political power and social hierarchy.", ko: "수자원에 대한 이러한 중앙 집중식 통제는 정치 권력과 사회적 계급 구조의 기반을 제공했습니다.", voca: ["centralized:중앙 집중식의", "basis:기반", "political power:정치 권력", "social hierarchy:사회적 계급 구조", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Mesopotamian Irrigation</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 농업 잠재력의 열쇠, 관개</span><div class="struct-text">수메르인들은 운하와 제방을 통해 강의 흐름을 조절함으로써 척박한 땅을 옥토로 바꾸는 선구적인 기술을 개발했습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 소규모 수로에서 광대한 운하망으로</span><div class="struct-text">초기의 간단한 수로는 시간이 흐르며 복잡한 네트워크로 진화했으며, 대규모 노동력의 동원이 필수적이었습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 자원 통제와 권력의 부상</span><div class="struct-text">수자원을 관리하기 위한 대규모 조직력은 신전 사제와 지도자들의 중앙 집중적 권력으로 이어졌고, 이는 곧 사회 계급과 국가 탄생의 기반이 되었습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">메소포타미아의 관개 시스템 발달이 사회 구조 및 정치 권력 형성에 미친 영향</span><span class="topic-eng">The impact of Mesopotamian irrigation development on the formation of social structures and political power.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 12-8</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 12-8</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Emotions can be used to refer to the unconscious, neurobiological response, while feelings are the cognitive assignments we make to those emotions.", ko: "정서(emotions)는 무의식적인 신경생물학적 반응을 지칭하는 데 사용될 수 있는 반면, 감정(feelings)은 우리가 그러한 정서에 부여하는 인지적 할당입니다.", voca: ["Emotions:정서", "refer to:~을 지칭하다", "unconscious:무의식적인", "neurobiological:신경생물학적인", "feelings:감정", "cognitive:인지적인", "assignments:할당/부여", "🍎", "🍎", "🍎"] },
+        { en: "This is undoubtedly a much more complicated dynamic and there is a great degree of highly detailed information explaining the interworking of these two.", ko: "이것은 의심할 여지 없이 훨씬 더 복잡한 역학이며, 이 둘의 상호 작용을 설명하는 매우 상세한 정보가 많이 존재합니다.", voca: ["undoubtedly:의심할 여지 없이", "complicated:복잡한", "dynamic:역학", "interworking:상호 작용", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "However, the most noteworthy application of the distinction between emotion and feeling is that human beings have some ability to cognitively assign, that is, to think about and make a decision about, just what a given emotion we experience might mean.", ko: "하지만 정서와 감정 사이의 구분을 적용할 때 가장 주목할 만한 점은, 인간이 우리가 경험하는 특정한 정서가 무엇을 의미할지 인지적으로 부여하는 능력, 즉 그것에 대해 생각하고 결정을 내리는 능력을 갖추고 있다는 것입니다.", voca: ["noteworthy:주목할 만한", "distinction:구분", "decision:결정", "experience:경험하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This can be more easily grasped when thinking about a more concrete exemplar—ancient war drums.", ko: "이것은 더 구체적인 예인 고대의 군대 북소리를 생각할 때 더 쉽게 이해될 수 있습니다.", voca: ["grasped:이해된/파악된", "concrete:구체적인", "exemplar:예/모범", "war drums:군대 북소리", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Most would agree that hearing a beating war drum does not lead one to pick a side in a given conflict.", ko: "대부분의 사람은 군대 북소리를 듣는 것이 어떤 갈등 상황에서 한쪽 편을 선택하게 만들지는 않는다는 점에 동의할 것입니다.", voca: ["beating:두드리는/울리는", "conflict:갈등/충돌", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "A beating war drum merely helps one march more energetically on whichever side was chosen to begin with.", ko: "울리는 군대 북소리는 단지 처음부터 선택된 어느 쪽에서든 더 활기차게 행진하도록 도와줄 뿐입니다.", voca: ["merely:단지", "energetically:활기차게", "whichever:어느 쪽이든", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The neurobiological experience set off by the auditory sensation of the drums causes one to “feel” more energy toward a given end and step more quickly.", ko: "북소리의 청각적 감각에 의해 유발된 신경생물학적 경험은 주어진 목적을 향해 더 많은 에너지를 '느끼고' 더 빨리 걷게 만듭니다.", voca: ["set off:유발하다/시작하게 하다", "auditory sensation:청각적 감각", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Perhaps Shakespeare knew something of this when he wrote Timon’s words, “follow thy drum ...”.", ko: "어쩌면 셰익스피어는 티몬의 대사 “그대의 북소리를 따르라...”를 썼을 때 이에 대해 어느 정도 알고 있었을지도 모릅니다.", voca: ["Perhaps:아마도", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Emotion vs. Feeling</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 정서(Emotion)의 정의</span><div class="struct-text">외부 자극에 대한 무의식적이고 신경생물학적인 반응입니다. (예: 북소리에 반응하는 신체 에너지)</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 감정(Feeling)의 정의</span><div class="struct-text">무의식적 정서에 대해 인지적으로 의미를 부여하고 해석하는 과정입니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 군대 북소리의 비유</span><div class="struct-text">북소리는 에너지를 높여줄 뿐(정서), 어느 편에 설지는 인간이 인지적으로 결정합니다(감정). 즉, 인간은 자신의 감정적 경험을 스스로 정의할 능력이 있습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">무의식적 정서와 인지적 해석인 감정의 구분 및 인간의 인지적 통제력</span><span class="topic-eng">The distinction between unconscious emotions and cognitive feelings, and the human capacity for cognitive assignment.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>
