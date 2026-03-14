@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - Couples and Facial Mimicry</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - Couples and Facial Mimicry</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Married couples are highly motivated to empathize with one another; to do this, they mimic each other’s facial expressions, which in turn facilitates similar emotional experiences.", ko: "기혼 부부들은 서로 공감하고자 하는 동기가 매우 강합니다. 이를 위해 그들은 서로의 얼굴 표정을 모방하고, 이는 결과적으로 유사한 감정적 경험을 촉진합니다.", voca: ["Married couples:기혼 부부", "empathize:공감하다", "mimic:모방하다", "facial expressions:얼굴 표정", "facilitates:촉진하다/용이하게 하다", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "People who are on the same page get along better and are more likely to stay happily married.", ko: "생각이나 감정이 일치하는 사람들은 더 잘 지내고 행복한 결혼 생활을 유지할 가능성이 더 높습니다.", voca: ["on the same page:생각/감정이 일치하는", "get along:지내다", "happily married:행복하게 결혼 생활을 하는", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Over time, research confirms, this mimicry leads to permanent changes in how the face is shaped.", ko: "시간이 지남에 따라 이러한 모방이 얼굴의 형태가 형성되는 방식에 영구적인 변화를 가져온다는 사실이 연구를 통해 확인되었습니다.", voca: ["Over time:시간이 지나며", "confirms:확인하다/확증하다", "permanent:영구적인", "shaped:형성된/모양 지어진", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In one study, more than a hundred volunteers were shown photographs of men and women taken in their first year of marriage and taken twenty-five years later, on the spouses’ silver wedding anniversary.", ko: "한 연구에서 100명 이상의 자원봉사자들에게 결혼 1년 차에 찍은 남녀의 사진과 25년 후인 은혼식 때 찍은 사진을 보여주었습니다.", voca: ["volunteers:자원봉사자", "photographs:사진", "spouses:배우자", "silver wedding anniversary:은혼식(결혼 25주년)", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "They were also shown photos of randomly matched pairs at the same ages.", ko: "그들에게는 같은 나이의 무작위로 매칭된 짝의 사진들도 보여주었습니다.", voca: ["randomly matched:무작위로 매칭된", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The volunteers were asked to judge the physical similarity of the couples.", ko: "자원봉사자들은 커플들의 외형적 유사성을 판단해 달라는 요청을 받았습니다.", voca: ["judge:판단하다", "physical similarity:외형적 유사성", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Sure enough, there was an increase in similarity among the married couples at the twenty-five-year mark, but not the randomly matched pairs.", ko: "아니나 다를까, 결혼 25년 차 부부들 사이에서는 유사성이 증가했지만, 무작위로 매칭된 짝들 사이에서는 그렇지 않았습니다.", voca: ["Sure enough:아니나 다를까", "increase:증가", "mark:시점/표시", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Most striking, the more similar people looked, the happier they reported they were in their union.", ko: "가장 놀라운 점은, 사람들이 서로 더 닮아 보일수록 그들의 결합(결혼 생활)에서 더 행복하다고 보고했다는 것입니다.", voca: ["striking:놀라운/현저한", "the more A, the more B:A할수록 더 B하다", "union:결합/결혼 생활", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "So next time you are struggling to connect with your spouse, try to subtly mimic his or her facial expression; it is likely to make you feel in sync and strengthen that emotional link that can weaken in times of strife.", ko: "그러니 다음에 배우자와 유대감을 형성하는 데 어려움을 겪는다면, 상대방의 얼굴 표정을 미묘하게 모방해 보십시오. 그것은 당신이 서로 조화를 이루고 있다고 느끼게 하고, 갈등의 시기에 약화될 수 있는 정서적 유대를 강화해 줄 가능성이 높습니다.", voca: ["struggling:애쓰는/고군분투하는", "connect:유대감을 형성하다", "subtly:미묘하게", "in sync:조화를 이루는/일치하는", "strengthen:강화하다", "emotional link:정서적 유대", "strife:갈등/불화", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Growing Alike: The Science of Empathy</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 공감의 도구, 얼굴 모방</span><div class="struct-text">부부는 서로 공감하기 위해 무의식적으로 상대의 표정을 흉내 내며, 이는 유사한 감정 공유로 이어집니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 25년의 세월과 물리적 닮음</span><div class="struct-text">수십 년간 이어진 표정 모방은 얼굴 형태에 영구적인 변화를 주어, 결혼 생활이 길어질수록 부부는 외형적으로 더 닮아갑니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 닮음과 행복의 비례 관계</span><div class="struct-text">외모가 많이 닮을수록 결혼 만족도가 더 높게 나타납니다. 표정 모방은 갈등 시기에 정서적 유대를 강화하는 실질적인 방법이 됩니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">부부의 감정적 공감과 표정 모방이 장기적인 외형적 유사성 및 결혼 만족도에 미치는 영향</span><span class="topic-eng">The influence of emotional empathy and facial mimicry on long-term physical similarity and marital satisfaction in couples.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank';
+            sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) {
+                sp.classList.add('revealed');
+                sp.style.borderBottomColor = 'transparent';
+            }
+            sp.onclick = function() {
+                this.classList.add('revealed');
+                this.style.borderBottomColor = 'transparent';
+                playTTS(w.replace(/[.,'"]/g, ""));
+            };
+            c.appendChild(sp);
+        });
+    }
+
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

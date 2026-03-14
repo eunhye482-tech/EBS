@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 16-8</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 16-8</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Through stories we can explore the human condition and see how other people think.", ko: "이야기를 통해 우리는 인간의 조건을 탐구하고 다른 사람들이 어떻게 생각하는지 볼 수 있습니다.", voca: ["stories:이야기", "explore:탐구하다", "human condition:인간의 조건", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This can affirm our own beliefs and perceptions, but it also challenges them.", ko: "이것은 우리 자신의 믿음과 인식을 확인시켜 줄 수 있지만, 그것들에 도전하기도 합니다.", voca: ["affirm:확인하다/확언하다", "beliefs:믿음", "perceptions:인식", "challenges:도전하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Regardless of the language, there is something universal about what occurs in the brain at the point when we are processing narratives, triggering better self-awareness and empathy for others.", ko: "언어에 관계없이, 우리가 이야기를 처리할 때 뇌에서 일어나는 현상에는 보편적인 무언가가 있으며, 이는 더 나은 자기 인식과 타인에 대한 공감을 유발합니다.", voca: ["Regardless of:~에 관계없이", "universal:보편적인", "occurs:일어나다/발생하다", "processing:처리하는", "narratives:이야기", "self-awareness:자기 인식", "empathy:공감", "🍎", "🍎", "🍎"] },
+        { en: "Psychologists scanned people listening to narratives in English, Farsi, and Mandarin, and found the same patterns of brain activation when people found meaning in the stories.", ko: "심리학자들은 영어, 페르시아어, 중국어로 된 이야기를 듣는 사람들을 스캔했고, 사람들이 이야기에서 의미를 찾을 때 동일한 뇌 활성화 패턴을 발견했습니다.", voca: ["Psychologists:심리학자", "scanned:스캔했다", "Farsi:페르시아어", "Mandarin:중국어(표준어)", "brain activation:뇌 활성화", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Other studies find that reading fiction significantly increases empathy toward others, including people of a different race or religion.", ko: "다른 연구들은 소설을 읽는 것이 다른 인종이나 종교의 사람들을 포함하여 타인에 대한 공감을 상당히 증가시킨다는 것을 발견했습니다.", voca: ["fiction:소설/허구", "significantly:상당히", "increases:증가시키다", "race:인종", "religion:종교", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "And the more absorbed in a story a reader is, the more empathetically they behave in real life.", ko: "그리고 독자가 이야기에 더 많이 몰입할수록, 그들은 실제 생활에서 더 공감하며 행동합니다.", voca: ["absorbed:몰입한", "empathetically:공감하며", "behave:행동하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "For instance, if the researcher “accidentally” dropped his pens, those participants who had previously reported being “highly absorbed” in the story were about twice as likely to help pick up the pens.", ko: "예를 들어, 연구자가 \"실수로\" 펜을 떨어뜨렸을 때, 이전에 이야기에 \"고도로 몰입\"했다고 보고한 참가자들은 펜을 줍는 것을 도울 가능성이 약 두 배 더 높았습니다.", voca: ["accidentally:실수로", "participants:참가자", "previously:이전에", "twice as likely:두 배 더 높은 가능성", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Another study concluded that literary fiction “uniquely engages the psychological processes needed to gain access to characters’ subjective experiences.”", ko: "또 다른 연구는 문학 소설이 \"등장인물의 주관적인 경험에 접근하는 데 필요한 심리적 과정에 독특하게 관여한다\"라고 결론지었습니다.", voca: ["concluded:결론지었다", "literary:문학적인", "uniquely:독특하게", "subjective:주관적인", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "That is to say, if you read novels, you can probably read emotions, vital skills for forming cooperative societies.", ko: "즉, 소설을 읽는다면 아마도 감정을 읽을 수 있을 것인데, 이는 협력적인 사회를 형성하기 위한 필수적인 기술입니다.", voca: ["That is to say:즉/말하자면", "emotions:감정", "vital skills:필수 기술", "forming:형성하는", "cooperative:협력적인", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Power of Narratives</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 이야기와 인간 조건의 탐구</span><div class="struct-text">우리는 이야기를 통해 타인의 사고방식을 엿보며, 자신의 신념을 확인하거나 때로는 도전받기도 합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 뇌의 보편성과 공감의 증대</span><div class="struct-text">언어와 관계없이 이야기를 처리할 때 뇌는 동일한 활성화 패턴을 보이며, 특히 소설 읽기는 타인에 대한 공감 능력을 크게 높여줍니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 공감의 행동화와 사회적 협력</span><div class="struct-text">이야기에 깊이 몰입한 사람은 실제 행동에서도 더 이타적이며, 소설을 통해 익힌 감정 읽기 능력은 협력적 사회를 만드는 필수 기반이 됩니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">이야기 처리에 대한 뇌의 보편적 패턴과 소설 읽기를 통한 공감 및 협력 능력의 향상</span><span class="topic-eng">The universal patterns of brain activity in narrative processing and the enhancement of empathy and cooperation through reading fiction.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank';
+            sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) {
+                sp.classList.add('revealed');
+                sp.style.borderBottomColor = 'transparent';
+            }
+            sp.onclick = function() {
+                this.classList.add('revealed');
+                this.style.borderBottomColor = 'transparent';
+                playTTS(w.replace(/[.,'"]/g, ""));
+            };
+            c.appendChild(sp);
+        });
+    }
+
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

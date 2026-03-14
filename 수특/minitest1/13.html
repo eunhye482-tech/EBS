@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master - EBS 10-2</title>
+    <title>English Master - The Stroop Effect</title>
     <style>
         :root { 
             --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
@@ -15,7 +15,6 @@
         #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         .hidden { display: none !important; }
         
-        /* 🍎 버튼 높이 및 정렬 완벽 유지 */
         .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
         .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
         .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
@@ -25,12 +24,14 @@
         .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
         .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
         .struct-item:last-child { border: none; }
-        .struct-label { font-weight: bold; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
         .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
-        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
         .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
         .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
         .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+
         .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
         .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
         .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
@@ -41,13 +42,12 @@
         .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
         .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
         .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
-        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
-        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
     </style>
 </head>
 <body>
 <div class="phone-container">
-    <div class="header" id="header-title">English Master - EBS 10-2</div>
+    <div class="header" id="header-title">English Master - The Stroop Effect</div>
     <div id="display-area"></div>
     <div id="nav-area" class="nav-btns-fixed hidden">
         <button class="btn-prev" onclick="prevSentence()">PREV</button>
@@ -56,17 +56,15 @@
 </div>
 <script>
     const fullData = [
-        { en: "Dear Ms. Crump:", ko: "Crump 여사님께:", voca: ["Dear:친애하는/귀하", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "I have reviewed your February 9 letter and fully understand your concerns.", ko: "귀하의 2월 9일 자 편지를 검토했으며 귀하의 우려 사항을 충분히 이해합니다.", voca: ["reviewed:검토했다", "fully:충분히", "concerns:우려 사항", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Your excellent article made a significant contribution to our journal, and I’m sorry we have not returned the favor.", ko: "귀하의 훌륭한 기사(논문)는 우리 저널에 큰 기여를 했으며, 우리가 그 호의에 보답하지 못한 점에 대해 사과드립니다.", voca: ["excellent:훌륭한", "significant:중대한/큰", "contribution:기여", "returned the favor:호의에 보답하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "We work with a public relations firm that selects one or two articles from each issue for publicity.", ko: "우리는 홍보를 위해 각 호에서 한두 개의 기사를 선정하는 홍보 업체와 함께 일합니다.", voca: ["public relations:홍보/PR", "firm:회사/업체", "selects:선정하다", "publicity:홍보/광고", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Unfortunately, the press release based on your article did not clearly attribute the research to your organization, leading some editors to mistakenly believe that our journal had conducted the study.", ko: "불행하게도, 귀하의 기사를 바탕으로 한 보도 자료가 그 연구가 귀하의 조직에서 이루어진 것임을 명확하게 밝히지 않았고, 그 결과 일부 편집자들이 우리 저널이 그 연구를 수행했다고 잘못 믿게 되었습니다.", voca: ["press release:보도 자료", "attribute to:~의 덕분으로 돌리다", "organization:조직/단체", "mistakenly:잘못하여", "conducted:수행했다", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "We recognize the oversight and regret any confusion this may have caused.", ko: "우리는 그 실수를 인정하며 이로 인해 발생했을 수 있는 모든 혼란에 대해 유감을 표합니다.", voca: ["recognize:인정하다/인식하다", "oversight:실수/간과", "regret:유감으로 생각하다", "confusion:혼란", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "The research results should have been clearly credited to your organization.", ko: "연구 결과는 귀하의 조직의 공로로 명확하게 기록되었어야 했습니다.", voca: ["research results:연구 결과", "credited to:~의 공로로 인정된", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "We have since addressed this issue with the PR firm to ensure that proper attribution is made moving forward.", ko: "우리는 이후 홍보 업체와 이 문제를 해결하여 앞으로는 적절한 출처 표기가 이루어지도록 보장했습니다.", voca: ["addressed:해결했다/다루었다", "ensure:보장하다", "proper:적절한", "attribution:출처 표기", "moving forward:앞으로", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Again, my apologies.", ko: "다시 한번 사과드립니다.", voca: ["apologies:사과", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Thank you for your understanding and for your outstanding contribution.", ko: "이해해 주셔서 감사드리며 귀하의 탁월한 기여에도 감사드립니다.", voca: ["understanding:이해", "outstanding:탁월한", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Sincerely, David Parker", ko: "David Parker 올림", voca: ["Sincerely:진심으로/올림", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+        { en: "Things become complicated when we consider a task that involves multiple processes differing in automaticity.", ko: "자동성이 다른 다수의 프로세스가 포함된 과업을 고려할 때 상황은 복잡해집니다.", voca: ["complicated:복잡한", "involves:포함하다", "multiple:다수의", "processes:프로세스/과정", "automaticity:자동성", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In a psychological task, people are required to name aloud the color of words while ignoring the words themselves.", ko: "한 심리학 과업에서 사람들은 단어 자체는 무시하면서 단어의 색상을 소리 내어 말해야 합니다.", voca: ["psychological task:심리학 과업", "name aloud:소리 내어 말하다", "ignoring:무시하는", "themselves:그 자체", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Sometimes, the words are compatible with the color with which they are printed (e.g., “red” printed with red ink).", ko: "때때로 단어는 인쇄된 색상과 일치합니다 (예: 빨간색 잉크로 인쇄된 'red').", voca: ["compatible with:~와 일치하는", "printed:인쇄된", "ink:잉크", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In other conditions, the words are incompatible with their color (e.g., “red” printed in blue).", ko: "다른 조건에서는 단어가 그 색상과 불일치합니다 (예: 파란색으로 인쇄된 'red').", voca: ["incompatible with:~와 불일치하는", "conditions:조건", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "People usually complete this task more slowly in incompatible than compatible conditions.", ko: "사람들은 보통 일치 조건보다 불일치 조건에서 이 과업을 더 느리게 완료합니다.", voca: ["complete:완료하다", "slowly:느리게", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "On incompatible trials, people do not intend to respond to the meaning of the word (the task is to name the ink color, not the word), but they typically become aware that it is easier said than done.", ko: "불일치 시도에서 사람들은 단어의 의미에 반응할 의도가 없지만(과업은 단어가 아니라 잉크 색상을 말하는 것이므로), 보통 말처럼 쉽지 않다는 것을 인식하게 됩니다.", voca: ["trials:시도/시험", "intend to:~할 의도이다", "respond:반응하다", "easier said than done:말처럼 쉽지 않은", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "They realize their attention is being drawn to the content of the words, despite its irrelevance to the task at hand and their intention to ignore it.", ko: "그들은 당면한 과업과의 무관함과 그것을 무시하려는 의도에도 불구하고, 자신의 주의가 단어의 내용에 끌리고 있음을 깨닫습니다.", voca: ["realize:깨닫다", "attention:주의", "drawn to:~에 끌리는", "irrelevance:무관함", "at hand:당면한", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "To overcome this automatic draw on attention, people must assert control to report a judgment that has been made challenging by a competing automatic process.", ko: "이러한 자동적인 주의 끌기를 극복하기 위해, 사람들은 경쟁하는 자동 프로세스에 의해 어렵게 만들어진 판단을 보고하기 위해 통제력을 발휘해야만 합니다.", voca: ["overcome:극복하다", "assert control:통제력을 발휘하다", "judgment:판단", "challenging:어려운/도전적인", "competing:경쟁하는", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "So, in this case, people are aware of an automatic process, but they cannot stop it and have difficulty correcting its influence.", ko: "따라서 이 경우 사람들은 자동 프로세스를 인식하고 있지만, 그것을 멈출 수 없으며 그 영향력을 수정하는 데 어려움을 겪습니다.", voca: ["aware of:~을 인식하는", "correcting:수정하는", "influence:영향", "difficulty:어려움", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
     ];
 
     let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
@@ -75,14 +73,14 @@
         const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
         if (currentMode === 'INTRO') {
             header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
-            area.innerHTML = `<div class="main-title-card"><h1>Letter of Apology</h1></div>
+            area.innerHTML = `<div class="main-title-card"><h1>The Stroop Interference</h1></div>
                 <div class="structure-container">
-                    <div class="struct-item"><span class="struct-label">📍 배경: 우려 사항에 대한 확인</span><div class="struct-text">논문 저자의 항의 편지를 받은 후, 연구 출처가 명확히 밝혀지지 않은 문제에 대해 충분한 공감을 표시합니다.</div></div>
-                    <div class="struct-item"><span class="struct-label">📍 원인: 홍보 대행사의 실수</span><div class="struct-text">홍보 업체의 보도 자료에서 연구의 주체를 저널로 오해하게 만든 실수가 있었음을 인정합니다.</div></div>
-                    <div class="struct-item"><span class="struct-label">📍 조치: 재발 방지 및 감사</span><div class="struct-text">업체와 문제를 논의하여 향후 정확한 출처 표기를 약속하고, 저자의 탁월한 기여에 다시 한번 감사를 전합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 도입: 자동성이 다른 프로세스의 충돌</span><div class="struct-text">인지 과업에서 서로 다른 자동성을 가진 과정들이 섞이면 정보 처리가 복잡해집니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 단어 읽기 vs 색상 말하기</span><div class="struct-text">글자색과 단어 의미가 일치하지 않을 때, 뇌는 숙달된 '글자 읽기(자동)'를 멈추지 못해 '색상 말하기(제어)' 속도가 느려집니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 통제의 한계와 인지적 노력</span><div class="struct-text">우리는 자동 프로세스의 간섭을 인지하고 있음에도 그것을 완전히 멈출 수 없으며, 이를 극복하기 위해 상당한 의식적 통제력이 필요합니다.</div></div>
                 </div>
-                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">보도 자료에서의 연구 출처 누락에 대한 공식 사과와 시정 조치</span><span class="topic-eng">A formal apology and corrective measures for the omission of research attribution in a press release.</span></div>
-                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">자동적 프로세스의 간섭으로 인해 발생하는 인지적 통제의 어려움 (스트룹 효과)</span><span class="topic-eng">The difficulty of cognitive control due to interference from automatic processes (Stroop Effect).</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
         } else {
             const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
             document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
@@ -96,7 +94,29 @@
     }
 
     function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
-    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank';
+            sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) {
+                sp.classList.add('revealed');
+                sp.style.borderBottomColor = 'transparent';
+            }
+            sp.onclick = function() {
+                this.classList.add('revealed');
+                this.style.borderBottomColor = 'transparent';
+                playTTS(w.replace(/[.,'"]/g, ""));
+            };
+            c.appendChild(sp);
+        });
+    }
+
     function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
     function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }

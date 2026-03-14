@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - The Pipeline Parable</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - The Pipeline Parable</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "In a village, there lived two friends named Jake and Ben.", ko: "한 마을에 제이크와 벤이라는 이름의 두 친구가 살았습니다.", voca: ["village:마을", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "They spent most of their time resting under a tree, thinking about what they should do with their lives.", ko: "그들은 대부분의 시간을 나무 아래에서 쉬면서 자신들의 인생에서 무엇을 해야 할지 생각하며 보냈습니다.", voca: ["spent:~을 보냈다", "resting:쉬는", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "One day, Jake noticed that the people in the village carried water pots from a river, which was far away.", ko: "어느 날, 제이크는 마을 사람들이 멀리 떨어진 강에서 물항아리를 나르는 것을 보았습니다.", voca: ["noticed:알아차렸다", "carried:날랐다", "pots:항아리", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "No matter how many trips they made, the water was never enough for their families’ needs.", ko: "그들이 아무리 여러 번 왕복해도, 그 물은 가족들이 필요로 하는 양에 결코 충분하지 않았습니다.", voca: ["No matter how:아무리 ~하더라도", "enough:충분한", "needs:필요/요구", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Then, he came up with an idea and suggested to Ben that they fetch water for the villagers in exchange for 25 cents per pot.", ko: "그때 그는 아이디어를 떠올렸고 벤에게 항아리당 25센트를 대가로 마을 사람들을 위해 물을 가져다주자고 제안했습니다.", voca: ["came up with:~을 떠올리다", "suggested:제안했다", "fetch:가져오다", "in exchange for:~의 대가로", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Jake and Ben presented their offer to the villagers, and everyone liked it.", ko: "(D) 제이크와 벤은 마을 사람들에게 제안을 했고, 모두가 그것을 좋아했습니다.", voca: ["presented:제시했다", "offer:제안", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Soon, their business grew rapidly.", ko: "곧 그들의 사업은 빠르게 성장했습니다.", voca: ["rapidly:빠르게", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "They made 50 to 100 trips a day and became the richest men in all the nearby villages.", ko: "그들은 하루에 50번에서 100번을 왕복하며 인근의 모든 마을에서 가장 부유한 사람이 되었습니다.", voca: ["richest:가장 부유한", "nearby:인근의", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "After ten years, however, Jake started to worry about the future.", ko: "그러나 10년 후, 제이크는 미래에 대해 걱정하기 시작했습니다.", voca: ["worry:걱정하다", "future:미래", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "“We are young and healthy now, but we won’t stay this way forever. What will happen to our families then?” he asked.", ko: "\"우리는 지금 젊고 건강하지만, 영원히 이렇지는 않을 거야. 그때 우리 가족들은 어떻게 될까?\"라고 그는 물었습니다.", voca: ["healthy:건강한", "forever:영원히", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Ben laughed and said, “Don’t worry about the future. We’re doing great now! Just enjoy the moment.”", ko: "벤은 웃으며 말했습니다. \"미래에 대해 걱정하지 마. 우린 지금 잘하고 있잖아! 그냥 이 순간을 즐겨.\"", voca: ["enjoy:즐기다", "moment:순간", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Jake, however, couldn’t shake off his concern.", ko: "(B) 하지만 제이크는 걱정을 떨쳐낼 수 없었습니다.", voca: ["shake off:떨쳐내다", "concern:걱정", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "One day, while visiting a neighboring village, Jake saw a potter making pots.", ko: "어느 날, 이웃 마을을 방문하던 중 제이크는 항아리를 만드는 도공을 보았습니다.", voca: ["neighboring:이웃의", "potter:도공", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "He noticed a pot with a long, narrow neck and suddenly had an idea.", ko: "그는 목이 길고 좁은 항아리를 보고 갑자기 아이디어를 떠올렸습니다.", voca: ["narrow:좁은", "suddenly:갑자기", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "“What if we build a long pipeline to bring water directly to the village?”", ko: "\"마을로 직접 물을 끌어올 수 있는 긴 파이프라인을 만들면 어떨까?\"", voca: ["pipeline:파이프라인", "directly:직접", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Excited, he shared his idea with Ben. But Ben shook his head.", ko: "흥분해서 그는 벤과 자신의 아이디어를 공유했습니다. 하지만 벤은 고개를 저었습니다.", voca: ["Excited:흥분한", "shared:공유했다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "“A pipeline made of clay? That will never work. It’s a terrible idea.”", ko: "\"점토로 만든 파이프라인이라고? 그건 절대 안 될 거야. 끔찍한 생각이야.\"", voca: ["clay:점토", "terrible:끔찍한", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "He gave a thousand reasons why it wouldn’t work, but Jake wanted to try it, even if by himself.", ko: "그는 그것이 안 되는 수천 가지 이유를 댔지만, 제이크는 혼자서라도 그것을 시도해보고 싶었습니다.", voca: ["try:시도하다", "by himself:혼자서", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Jake had just one reason to try—he believed in it.", ko: "제이크에게는 시도할 단 하나의 이유가 있었는데, 바로 그것을 믿었다는 것입니다.", voca: ["believed in:~을 믿다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The construction began, and, as expected, many problems arose.", ko: "건설이 시작되었고, 예상대로 많은 문제가 발생했습니다.", voca: ["construction:건설", "expected:예상된", "arose:발생했다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The pipe broke several times, and there were countless challenges.", ko: "파이프는 여러 번 부서졌고, 수많은 어려움이 있었습니다.", voca: ["broke:부서졌다", "several times:여러 번", "countless:수많은", "challenges:도전/어려움", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "But Jake didn’t give up.", ko: "(C) 하지만 제이크는 포기하지 않았습니다.", voca: ["give up:포기하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "After about seven months of hard work, the pipeline was finally completed, and water started flowing directly into the village.", ko: "약 7개월간의 고된 노력 끝에 파이프라인이 마침내 완성되었고, 물이 마을로 직접 흐르기 시작했습니다.", voca: ["finally:마침내", "completed:완성된", "flowing:흐르는", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Now, Jake could provide thousands of pots of water each day, and he lowered the price to just 10 cents per pot.", ko: "이제 제이크는 매일 수천 항아리의 물을 제공할 수 있었고, 가격을 항아리당 단 10센트로 낮췄습니다.", voca: ["provide:제공하다", "lowered:낮췄다", "price:가격", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "With this new system, money started flowing into Jake’s pocket, while Ben was left jobless.", ko: "이 새로운 시스템으로 돈이 제이크의 주머니로 흘러 들어오기 시작한 반면, 벤은 일자리를 잃었습니다.", voca: ["system:시스템", "jobless:실직한", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "After all, who would pay 25 cents for water when they could get it for 10 cents?", ko: "결국, 10센트에 물을 얻을 수 있는데 누가 25센트를 내겠습니까?", voca: ["pay:지불하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Ben regretted ignoring Jake’s idea, but Jake invited him to join the new project.", ko: "벤은 제이크의 아이디어를 무시한 것을 후회했지만, 제이크는 그에게 새로운 프로젝트에 참여하라고 권유했습니다.", voca: ["regretted:후회했다", "ignoring:무시하는", "invited:권유했다/초대했다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Together, they expanded the pipeline and helped even more villages.", ko: "그들은 함께 파이프라인을 확장했고 훨씬 더 많은 마을을 도왔습니다.", voca: ["expanded:확장했다", "helped:도왔다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Pipeline Story</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 노동 집약적 사업의 시작</span><div class="struct-text">제이크와 벤은 강에서 물을 길어다 파는 사업으로 큰 부자가 되었지만, 제이크는 미래의 건강 악화를 대비할 대안을 고민합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 혁신적 아이디어와 회의적 반응</span><div class="struct-text">제이크는 자동으로 물을 끌어올 파이프라인 건설을 제안하나, 벤은 현실성이 없다며 거절합니다. 제이크는 수많은 실패를 딛고 홀로 건설을 지속합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 시스템의 승리와 상생</span><div class="struct-text">완성된 파이프라인은 더 낮은 가격으로 대량의 물을 공급하게 되었고, 제이크는 실직한 벤과 손을 잡고 더 넓은 지역으로 사업을 확장합니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">단기적 노동 수익에 안주하기보다 장기적 효율을 위한 시스템 구축의 중요성</span><span class="topic-eng">The importance of building a system for long-term efficiency rather than being complacent with short-term labor income.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank';
+            sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) {
+                sp.classList.add('revealed');
+                sp.style.borderBottomColor = 'transparent';
+            }
+            sp.onclick = function() {
+                this.classList.add('revealed');
+                this.style.borderBottomColor = 'transparent';
+                playTTS(w.replace(/[.,'"]/g, ""));
+            };
+            c.appendChild(sp);
+        });
+    }
+
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

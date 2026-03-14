@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - Early Taste Preferences</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - Early Taste Preferences</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Science shows that, when compared to adults, children naturally prefer higher levels of sweet and salty tastes and reject bitter tastes.", ko: "과학에 따르면, 성인과 비교했을 때 아이들은 선천적으로 더 높은 수준의 단맛과 짠맛을 선호하고 쓴맛을 거부합니다.", voca: ["compared to:~와 비교했을 때", "naturally:선천적으로/자연적으로", "prefer:선호하다", "reject:거부하다", "bitter:쓴", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This might help explain why children are drawn to more unhealthy food choices within our current food environment—an environment composed of high-salt, high-refined-sugar foods.", ko: "이것은 왜 아이들이 고염분, 고정제당 식품으로 구성된 현재의 식품 환경 내에서 더 건강하지 않은 식품 선택에 끌리는지를 설명하는 데 도움이 될 수 있습니다.", voca: ["drawn to:~에 끌리는", "unhealthy:건강하지 않은", "composed of:~로 구성된", "high-refined-sugar:고정제당", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In support of this idea, studies have found that sensory experiences, beginning early in life, can shape preferences in both a positive and a negative way.", ko: "이러한 생각을 뒷받침하듯, 생애 초기에 시작되는 감각 경험이 긍정적인 방식과 부정적인 방식 모두로 선호도를 형성할 수 있다는 연구 결과가 나왔습니다.", voca: ["In support of:~을 뒷받침하여", "sensory experiences:감각 경험", "shape:형성하다/모양을 만들다", "preferences:선호도", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "For example, expecting mothers who consume diets rich in healthy foods can help develop their child’s taste preferences in a positive way because flavors from foods that the mother eats are transmitted to amniotic fluid and to mother’s milk, creating an environment in which breastfed infants are more accepting of these flavors.", ko: "예를 들어, 건강한 음식이 풍부한 식단을 섭취하는 임산부는 아이의 미각 선호도를 긍정적인 방식으로 발달시키는 데 도움을 줄 수 있는데, 이는 어머니가 먹는 음식의 풍미가 양수와 모유로 전달되어 모유를 먹는 영아가 이러한 풍미를 더 잘 받아들이는 환경을 조성하기 때문입니다.", voca: ["expecting mothers:임산부", "consume:섭취하다", "transmitted:전달되는", "amniotic fluid:양수", "breastfed infants:모유 수유 영아", "accepting of:~을 받아들이는", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In contrast, infants fed formula learn to prefer its unique flavor profile and may have more difficulty initially accepting flavors not found in formula, such as those of fruit and vegetables.", ko: "대조적으로, 분유를 먹고 자란 영아는 분유 특유의 풍미 프로필을 선호하게 되어 과일이나 채소와 같이 분유에서 발견되지 않는 풍미를 처음에는 받아들이는 데 더 큰 어려움을 겪을 수 있습니다.", voca: ["In contrast:대조적으로", "fed formula:분유를 먹고 자란", "flavor profile:풍미 프로필", "initially:처음에", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Having healthy food experiences early in life may go a long way toward promoting healthy eating throughout a person’s life span.", ko: "생애 초기에 건강한 음식 경험을 하는 것은 한 사람의 전 생애 동안 건강한 식습관을 촉진하는 데 큰 도움이 될 수 있습니다.", voca: ["go a long way toward:~에 큰 도움이 되다", "promoting:촉진하는", "life span:수명/생애", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Origins of Taste</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 아동의 선천적 미각 선호</span><div class="struct-text">아이들은 단맛과 짠맛을 선호하고 쓴맛을 거부하는 본능이 있어, 현대의 고염분·고당분 식품 환경에 쉽게 노출됩니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 초기 감각 경험과 선호도 형성</span><div class="struct-text">생애 초기 경험이 중요합니다. 임산부가 먹는 음식의 풍미는 양수와 모유를 통해 전달되어 아이의 미래 입맛을 형성합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 평생 건강을 결정하는 시작점</span><div class="struct-text">모유 수유아는 다양한 풍미에 익숙해지는 반면, 분유 수유아는 채소 등의 맛을 받아들이기 힘들 수 있습니다. 초기의 건강한 경험이 평생의 식습관을 좌우합니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">생애 초기 감각 경험이 아동의 미각 선호도 및 평생 식습관 형성에 미치는 영향</span><span class="topic-eng">The influence of early life sensory experiences on children's taste preferences and lifelong eating habits.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank';
+            sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) {
+                sp.classList.add('revealed');
+                sp.style.borderBottomColor = 'transparent';
+            }
+            sp.onclick = function() {
+                this.classList.add('revealed');
+                this.style.borderBottomColor = 'transparent';
+                playTTS(w.replace(/[.,'"]/g, ""));
+            };
+            c.appendChild(sp);
+        });
+    }
+
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

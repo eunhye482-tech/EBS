@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - IT and Community Fragmentation</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - IT and Community Fragmentation</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Information technology can play an important role in both bringing communities together and splitting them apart.", ko: "정보기술은 공동체를 하나로 모으는 것과 갈라놓는 것 모두에서 중요한 역할을 할 수 있습니다.", voca: ["Information technology:정보기술", "play a role:역할을 하다", "bringing together:모으다/결합시키다", "splitting apart:갈라놓다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "On the one hand, IT has the potential to increase shared information and norms across larger groups.", ko: "한편으로, IT는 더 큰 집단 전체에 공유된 정보와 규범을 증가시킬 잠재력을 가지고 있습니다.", voca: ["On the one hand:한편으로는", "potential:잠재력", "shared:공유된", "norms:규범", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "For instance, in the 1960s, most Americans got their news from one of three national television networks and a small number of other publications.", ko: "예를 들어, 1960년대에 대부분의 미국인은 세 개의 전국 텔레비전 네트워크 중 하나와 소수의 다른 출판물로부터 뉴스를 얻었습니다.", voca: ["For instance:예를 들어", "national:전국적인", "networks:연결망/네트워크", "publications:출판물", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "If Walter Cronkite, a famous American broadcast journalist, said it, many Americans believed it was true.", ko: "유명한 미국 방송 기자였던 Walter Cronkite가 그렇게 말하면, 많은 미국인은 그것이 사실이라고 믿었습니다.", voca: ["broadcast journalist:방송 기자", "believed:믿었다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "That almost certainly helped spread more shared norms across a country that previously had strong regional differences.", ko: "그것은 이전에 강한 지역적 차이가 있었던 국가 전역에 더 많은 공유된 규범을 확산시키는 데 거의 확실히 도움이 되었습니다.", voca: ["spread:확산시키다/퍼뜨리다", "previously:이전에", "regional differences:지역적 차이", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "But in the 2016 presidential election, many Americans got their news from social networking sites and other online media that created highly tailored news feeds for each individual.", ko: "그러나 2016년 대통령 선거에서 많은 미국인은 각 개인에게 고도로 맞춤화된 뉴스 피드를 생성하는 소셜 네트워킹 사이트와 기타 온라인 미디어로부터 뉴스를 얻었습니다.", voca: ["presidential election:대통령 선거", "highly tailored:고도로 맞춤화된", "individual:개인", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "If you had liberal friends and interests, you were rarely exposed to conservative news outlets, and vice versa.", ko: "당신이 자유주의적인 친구와 관심사를 가지고 있다면 보수적인 뉴스 매체에 노출되는 경우가 거의 없었으며, 그 반대도 마찬가지였습니다.", voca: ["liberal:자유주의적인", "rarely:거의 ~않는", "exposed to:~에 노출된", "conservative:보수적인", "news outlets:뉴스 매체", "vice versa:반대의 경우도 마찬가지", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In a community where each subgroup saw a different set of facts about the world and had a different value system for interpreting those facts, the shared norms needed for the overall community to function effectively were greatly weakened.", ko: "각 하위 집단이 세상에 대해 서로 다른 일련의 사실을 보고 그 사실을 해석하기 위한 서로 다른 가치 체계를 가진 공동체에서는, 전체 공동체가 효과적으로 작동하는 데 필요한 공유된 규범이 크게 약화되었습니다.", voca: ["subgroup:하위 집단", "value system:가치 체계", "interpreting:해석하는", "overall:전체적인", "function:작동하다/기능하다", "effectively:효과적으로", "weakened:약화된", "🍎", "🍎", "🍎"] },
+        { en: "In a sense, the United States seemed to be fragmenting into two separate separate communities.", ko: "어떤 의미에서 미국은 두 개의 분리된 공동체로 파편화되는 것처럼 보였습니다.", voca: ["In a sense:어떤 의미에서", "fragmenting:파편화되는/분열되는", "separate:분리된", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>IT: Uniting or Dividing?</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 정보기술의 양면적 역할</span><div class="struct-text">IT는 집단을 하나로 묶는 잠재력과 동시에 각 집단을 고립시켜 분열시키는 상반된 특성을 지니고 있습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 과거의 통합 vs 현재의 분열</span><div class="struct-text">1960년대 전국 방송망은 지역 차를 넘어 공통 규범을 확산시켰으나, 2016년 소셜 미디어의 맞춤형 뉴스 피드는 개인을 서로 다른 '사실의 섬'에 가두었습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 공유 규범의 약화와 공동체 파편화</span><div class="struct-text">서로 다른 사실과 가치 체계를 가진 하위 집단들이 늘어나면서, 공동체 전체가 효과적으로 기능하는 데 필요한 보편적 규범이 무너지고 있습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">정보기술의 발달이 맞춤형 정보 제공을 통해 공동체의 공유 규범을 약화시키고 파편화하는 현상</span><span class="topic-eng">The phenomenon where information technology weakens shared norms and fragments communities through personalized information.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank';
+            sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) {
+                sp.classList.add('revealed');
+                sp.style.borderBottomColor = 'transparent';
+            }
+            sp.onclick = function() {
+                this.classList.add('revealed');
+                this.style.borderBottomColor = 'transparent';
+                playTTS(w.replace(/[.,'"]/g, ""));
+            };
+            c.appendChild(sp);
+        });
+    }
+
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

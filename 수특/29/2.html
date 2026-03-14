@@ -1,0 +1,125 @@
+The internet has transformed the fashion marketplace, making it increasingly difficult to predict the demand for the selling season. Consumers can browse for product information and prices and gain comparative information almost instantaneously, making them more informed than ever before, transferring the balance of power from the retailer to the customer. This is exacerbated by open and real-time access to fashion shows, facilitated through livestreaming, coupled with social media access to celebrity looks and lifestyles and the sharing of all aspects of life on social media. Consumers use fashion choices to express their individual style and personality, especially those promoting ‘brand me’ on social media. The traditional two-season offer is no longer seen as enough, with consumers demanding new products throughout the whole year. This creates a problem for fashion retailers as many consumers are looking for more exclusive pieces to differentiate themselves, forcing up the desire for trend-led ever more rapidly changing styles, while still demanding affordable prices.<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - EBS 16-12</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 16-12</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "The internet has transformed the fashion marketplace, making it increasingly difficult to predict the demand for the selling season.", ko: "인터넷은 패션 시장을 변화시켜 판매 시즌의 수요를 예측하는 것을 점점 더 어렵게 만들었습니다.", voca: ["transformed:변화시킨/변형시킨", "marketplace:시장", "increasingly:점점 더", "predict:예측하다", "demand:수요", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Consumers can browse for product information and prices and gain comparative information almost instantaneously, making them more informed than ever before, transferring the balance of power from the retailer to the customer.", ko: "소비자들은 제품 정보와 가격을 검색하고 비교 정보를 거의 즉각적으로 얻을 수 있으며, 그 어느 때보다 더 많은 정보를 갖게 되어 힘의 균형이 소매업체에서 고객에게로 이동했습니다.", voca: ["browse:검색하다", "comparative:비교의", "instantaneously:즉각적으로", "informed:정보에 밝은", "transferring:이동시키는", "balance of power:힘의 균형", "retailer:소매업체", "🍎", "🍎", "🍎"] },
+        { en: "This is exacerbated by open and real-time access to fashion shows, facilitated through livestreaming, coupled with social media access to celebrity looks and lifestyles and the sharing of all aspects of life on social media.", ko: "이것은 라이브 스트리밍을 통해 용이해진 패션쇼에 대한 공개적이고 실시간적인 접근과, 유명인의 스타일과 라이프스타일에 대한 소셜 미디어 접근 및 소셜 미디어에서의 삶의 모든 측면에 대한 공유가 결합되어 더욱 악화되었습니다.", voca: ["exacerbated:악화된", "real-time:실시간의", "facilitated:용이해진", "livestreaming:라이브 스트리밍", "celebrity:유명인", "lifestyles:라이프스타일", "aspects:측면", "🍎", "🍎", "🍎"] },
+        { en: "Consumers use fashion choices to express their individual style and personality, especially those promoting ‘brand me’ on social media.", ko: "소비자들은 자신의 개별적인 스타일과 개성을 표현하기 위해 패션을 선택하며, 특히 소셜 미디어에서 '브랜드 미'를 홍보하는 사람들이 그러합니다.", voca: ["express:표현하다", "individual:개별적인", "personality:개성", "promoting:홍보하는", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The traditional two-season offer is no longer seen as enough, with consumers demanding new products throughout the whole year.", ko: "전통적인 2개 시즌 체제는 더 이상 충분하지 않은 것으로 간주되며, 소비자들은 일년 내내 신제품을 요구하고 있습니다.", voca: ["traditional:전통적인", "no longer:더 이상 ~않는", "demanding:요구하는", "throughout:내내", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This creates a problem for fashion retailers as many consumers are looking for more exclusive pieces to differentiate themselves, forcing up the desire for trend-led ever more rapidly changing styles, while still demanding affordable prices.", ko: "이는 많은 소비자가 자신을 차별화하기 위해 더 독점적인 제품을 찾고, 여전히 저렴한 가격을 요구하면서도 트렌드에 따라 더욱 빠르게 변하는 스타일에 대한 욕구를 높이기 때문에 패션 소매업체에 문제를 일으킵니다.", voca: ["exclusive:독점적인", "differentiate:차별화하다", "desire:욕구", "trend-led:트렌드 주도의", "rapidly:빠르게", "affordable:저렴한/감당할 수 있는", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Fashion Market Evolution</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 인터넷에 의한 수요 예측의 난항</span><div class="struct-text">인터넷 발달로 소비자의 정보력이 증대되면서 패션 소매업체의 수요 예측이 과거보다 훨씬 어려워졌습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 정보 접근성과 '브랜드 미'</span><div class="struct-text">라이브 스트리밍과 소셜 미디어를 통해 유명인의 스타일을 실시간으로 접하는 소비자들은 패션을 자신의 정체성('브랜드 미')을 드러내는 도구로 활용합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 신제품 수요 증가와 소매업체의 과제</span><div class="struct-text">전통적인 시즌 체계가 붕괴되고 일년 내내 트렌디하고 독점적이면서도 저렴한 제품을 원하는 소비자의 요구는 업체들에 큰 도전이 되고 있습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">디지털 기술과 소셜 미디어가 패션 시장의 소비 행태와 소매업 환경에 미친 변화</span><span class="topic-eng">Changes in fashion consumer behavior and the retail environment driven by digital technology and social media.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank';
+            sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) {
+                sp.classList.add('revealed');
+                sp.style.borderBottomColor = 'transparent';
+            }
+            sp.onclick = function() {
+                this.classList.add('revealed');
+                this.style.borderBottomColor = 'transparent';
+                playTTS(w.replace(/[.,'"]/g, ""));
+            };
+            c.appendChild(sp);
+        });
+    }
+
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>
