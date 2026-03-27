@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - Evolutionary Instinct</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS MT2-7</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="handlePrev()">PREV</button>
+        <button class="btn-next" onclick="handleNext()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Why do humans have the counterproductive instinct to favor natural products in the absence of knowledge of their benefits or their potential for harm?", ko: "왜 인간은 천연 제품의 이점이나 잠재적인 해로움에 대한 지식이 없는 상태에서도 그것을 선호하는 역효과를 낳는 본능을 가지고 있는가?", voca: ["counterproductive:역효과를 낳는", "instinct:본능", "favor:선호하다", "absence:부재", "potential:잠재적인", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The answer likely lies in our genes.", ko: "그 답은 아마도 우리의 유전자에 있을 것이다.", voca: ["likely:아마도", "lies in:~에 있다", "genes:유전자", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Our species, through most of its evolutionary history, relied heavily upon experience to judge whether ingestion of something was beneficial (i.e., nutritional or medicinal) versus whether it was dangerous (i.e., poisonous).", ko: "우리 종은 진화 역사의 대부분을 통해, 무언가의 섭취가 유익한지(즉, 영양가가 있거나 약이 되는지) 아니면 위험한지(즉, 독이 있는지) 판단하기 위해 경험에 크게 의존했다.", voca: ["evolutionary:진화의", "relied upon:~에 의존했다", "ingestion:섭취", "beneficial:유익한", "poisonous:독이 있는", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We evolved the instinct to avoid plants that made us sick and favored those that made us well.", ko: "우리는 우리를 아프게 한 식물을 피하고 우리를 건강하게 만든 식물을 선호하는 본능을 진화시켰다.", voca: ["evolved:진화시켰다", "avoid:피하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Treating unknowns with great caution provided a terrific survival advantage.", ko: "알 수 없는 것을 큰 주의를 기울여 다루는 것은 엄청난 생존상의 이점을 제공했다.", voca: ["Treating:다루는 것", "caution:주의", "terrific:엄청난", "survival advantage:생존상의 이점", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Today, we trust that products of nature are safe to consume.", ko: "오늘날, 우리는 자연의 산물이 섭취하기에 안전하다고 믿는다.", voca: ["nature:자연", "consume:섭취하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "But those pills coming off a pharmaceutical production line look nothing like what our instincts tell us is safe to eat.", ko: "하지만 제약 생산 라인에서 나오는 저 알약들은 우리의 본능이 먹기에 안전하다고 말하는 것과는 전혀 닮지 않았다.", voca: ["pills:알약", "pharmaceutical:제약의", "production line:생산 라인", "look nothing like:~와 전혀 닮지 않다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The ingredients remind us of a high school chemistry lab.", ko: "그 성분들은 우리에게 고등학교 화학 실험실을 연상시킨다.", voca: ["ingredients:성분", "remind:연상시키다", "chemistry lab:화학 실험실", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Yet we are expected to consume them.", ko: "하지만 우리는 그것들을 섭취할 것으로 기대된다.", voca: ["expected:기대되는", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Thus, we treat them with caution just as our distant ancestors regarded a new plant.", ko: "따라서, 우리는 우리의 먼 조상들이 새로운 식물을 대했던 것처럼 그것들을 주의해서 다룬다.", voca: ["distant ancestors:먼 조상", "regarded:대했다/여겼다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "When in need of a remedy, we are drawn to derivatives of our food, plant products, which we perceive to be safe, and not artificial products of science.", ko: "치료제가 필요할 때, 우리는 과학의 인공적인 산물이 아니라 우리가 안전하다고 인식하는 식품의 파생물인 식물 제품에 끌린다.", voca: ["remedy:치료제", "drawn to:~에 끌리는", "derivatives:파생물", "perceive:인식하다", "artificial:인공적인", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Instinct for Natural Products</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 천연 제품 선호의 역설적 본능</span><div class="struct-text">이점이나 해로움에 대한 정확한 지식 없이도 '천연'을 선호하는 인간의 본능은 유전적 배경에서 비롯됩니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 진화 역사가 낳은 생존 전략</span><div class="struct-text">인류는 오랜 시간 경험을 통해 유익한 것과 독이 되는 것을 구분해 왔으며, 미지의 것을 경계하는 태도는 생존에 큰 이점이 되었습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 인공적 산물에 대한 본능적 경계</span><div class="struct-text">현대의 화학적 치료제는 본능적으로 낯설고 위험해 보이기 때문에, 우리는 조상들처럼 익숙한 식물 기반의 파생물에 더 끌리게 됩니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">인간이 천연 제품을 선호하고 인공 치료제를 경계하는 진화론적 배경</span><span class="topic-eng">The evolutionary background of why humans favor natural products over artificial ones.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function handleNext() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { window.location.href = '../../index.html'; } }
+    function handlePrev() { if (currentIdx > 0) { currentIdx--; render(); } else { window.location.href = '../../index.html'; } }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank'; sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) { sp.classList.add('revealed'); sp.style.borderBottomColor = 'transparent'; }
+            sp.onclick = function() { this.classList.add('revealed'); this.style.borderBottomColor = 'transparent'; playTTS(w.replace(/[.,'"]/g, "")); };
+            c.appendChild(sp);
+        });
+    }
+    
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

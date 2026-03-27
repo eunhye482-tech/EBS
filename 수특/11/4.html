@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - Portion Distortion</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS MT2-6</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="handlePrev()">PREV</button>
+        <button class="btn-next" onclick="handleNext()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Many factors contribute to Americans’ growing waistlines, but one observation in particular cannot be overlooked: The incidence of obesity has increased in parallel with increasing portion sizes.", ko: "많은 요인들이 미국인들의 허리둘레 증가의 원인이 되지만, 특히 한 가지 관찰 결과는 간과될 수 없다. 비만 발생률이 1회 제공량의 증가와 병행하여 증가했다는 것이다.", voca: ["factors:요인", "waistlines:허리둘레", "incidence:발생률", "obesity:비만", "parallel:병행/평행", "overlooked:간과된", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Consider this: Adults today consume an average of 300 more calories per day than they did in the year 1985.", ko: "이것을 생각해 보라. 오늘날 성인들은 1985년에 그랬던 것보다 하루 평균 300칼로리를 더 소비한다.", voca: ["Consider:고려하다", "consume:소비하다", "average:평균", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Is this just a coincidence, or do larger portion sizes have something to do with it?", ko: "이것이 단지 우연일까, 아니면 더 큰 1회 제공량이 그것과 관련이 있을까?", voca: ["coincidence:우연", "have something to do with:~와 관련이 있다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In almost every eating situation, we are now confronted by huge portions, which are perceived as “normal” or “a great value.”", ko: "거의 모든 식사 상황에서 우리는 이제 거대한 1회 제공량에 직면하며, 이는 ‘정상’ 또는 ‘가성비 좋은’ 것으로 인식된다.", voca: ["confronted:직면한", "perceived:인식된", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Americans have created the perception that large portion sizes are appropriate, creating an environment of portion distortion.", ko: "미국인들은 큰 1회 제공량이 적절하다는 인식을 만들어 냈고, 이는 1회 제공량 왜곡의 환경을 조성했다.", voca: ["perception:인식", "appropriate:적절한", "distortion:왜곡", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We find portion distortions in restaurants, where the jumbo-sized portions are consistently 250 percent larger than the regular portions.", ko: "우리는 식당에서 1회 제공량 왜곡을 발견하는데, 그곳의 점보 사이즈 제공량은 일관되게 일반 제공량보다 250퍼센트 더 크다.", voca: ["consistently:일관되게", "regular:일반적인", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We even find portion distortions in our homes, where the sizes of our bowls and glasses have steadily increased and where the surface area of the average dinner plate has increased 36 percent since 1960.", ko: "우리는 심지어 우리 집에서도 1회 제공량 왜곡을 발견하는데, 그릇과 잔의 크기가 꾸준히 증가해 왔고 평균 저녁 식사 접시의 표면적은 1960년 이후 36퍼센트 증가했다.", voca: ["steadily:꾸준히", "surface area:표면적", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Research shows that people unintentionally consume more calories when offered larger portions.", ko: "연구에 따르면 사람들은 더 큰 제공량이 제공될 때 의도치 않게 더 많은 칼로리를 소비한다.", voca: ["unintentionally:의도치 않게", "offered:제공된", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Consuming larger portion sizes can contribute to positive energy balance, which, over time, leads to weight gain and ultimately can result in obesity.", ko: "더 큰 1회 제공량을 섭취하는 것은 양(+)의 에너지 균형의 원인이 될 수 있으며, 이는 시간이 지남에 따라 체중 증가로 이어지고 궁극적으로 비만을 초래할 수 있다.", voca: ["positive energy balance:양의 에너지 균형", "weight gain:체중 증가", "ultimately:궁극적으로", "result in:~을 초래하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The bottom line is that while exercise is important for many reasons, paying attention to what we eat and how much we eat is essential for maintaining a healthy weight.", ko: "결론은 운동이 여러 가지 이유로 중요하긴 하지만, 우리가 무엇을 먹고 얼마나 먹는지에 주의를 기울이는 것이 건강한 체중을 유지하는 데 필수적이라는 것이다.", voca: ["bottom line:결론/핵심", "essential:필수적인", "maintaining:유지하는", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Portion Distortion & Obesity</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 비만 증가와 1회 제공량의 상관관계</span><div class="struct-text">미국인의 비만율 증가는 1회 제공량(portion sizes)의 확대와 궤를 같이하며, 1985년 대비 하루 300kcal 이상의 섭취가 늘었습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 1회 제공량 왜곡(Portion Distortion) 현상</span><div class="struct-text">거대한 양을 '정상'으로 인식하는 환경이 조성되었습니다. 식당뿐만 아니라 가정 내 식기류의 크기도 지난 수십 년간 꾸준히 커져 왔습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 식단 조절의 필수성</span><div class="struct-text">무의식적인 과잉 섭취가 비만으로 이어지는 만큼, 운동만큼이나 무엇을 얼마나 먹는지 주의를 기울이는 것이 체중 유지에 필수적입니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">1회 제공량 확대와 인식 왜곡이 비만에 미치는 영향과 식습관 관리의 중요성</span><span class="topic-eng">The impact of increasing portion sizes and portion distortion on obesity and the importance of diet control.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function handleNext() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { window.location.href = '../../index.html'; } }
+    function handlePrev() { if (currentIdx > 0) { currentIdx--; render(); } else { window.location.href = '../../index.html'; } }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank'; sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) { sp.classList.add('revealed'); sp.style.borderBottomColor = 'transparent'; }
+            sp.onclick = function() { this.classList.add('revealed'); this.style.borderBottomColor = 'transparent'; playTTS(w.replace(/[.,'"]/g, "")); };
+            c.appendChild(sp);
+        });
+    }
+    
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

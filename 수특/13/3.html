@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - Interoception and Empathy</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS MT2-11</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="handlePrev()">PREV</button>
+        <button class="btn-next" onclick="handleNext()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Becoming aware of our internal sensations can help us handle our own emotions.", ko: "우리의 내부 감각을 인식하게 되는 것은 우리가 우리 자신의 감정을 다루는 데 도움을 줄 수 있다.", voca: ["internal sensations:내부 감각", "aware of:~을 인식하는", "handle:다루다", "emotions:감정", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Perhaps more surprisingly, the body’s interoceptive faculty can also bring us into closer contact with other people’s emotions.", ko: "어쩌면 더 놀랍게도, 신체의 내부 감각 능력은 또한 우리를 다른 사람의 감정과 더 밀접하게 접촉하게 할 수 있다.", voca: ["surprisingly:놀랍게도", "interoceptive:내부 감각의", "faculty:능력", "closer contact:밀접한 접촉", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "That’s because the brain, on its own, has no direct access to the contents of other people’s minds, no way to feel what others are feeling.", ko: "그것은 뇌 스스로는 다른 사람의 마음 내용에 직접 접근할 수 없고, 다른 사람이 느끼고 있는 것을 느낄 방법이 없기 때문이다.", voca: ["direct access:직접 접근", "contents:내용", "minds:마음", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Interpreting others’ spoken words and facial expressions may yield only a coolly abstract sense of the emotions that stir within.", ko: "다른 사람의 말과 얼굴 표정을 해석하는 것은 내면에서 소용돌이치는 감정에 대한 오직 차갑고 추상적인 감각만을 줄 뿐일지도 모른다.", voca: ["Interpreting:해석하는 것", "facial expressions:얼굴 표정", "abstract:추상적인", "stir within:내면에서 소용돌이치다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The body acts as a critical conduit, supplying the brain with the visceral information it lacks.", ko: "신체는 중요한 통로 역할을 하며, 뇌에 부족한 내장 정보를 공급한다.", voca: ["critical:중요한", "conduit:통로", "supplying:공급하는", "visceral:내장의/본능적인", "lacks:부족하다", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "It does so in this way: When interacting with other people, we subtly and unconsciously mimic their facial expressions, gestures, posture, and vocal pitch.", ko: "그것은 이런 방식으로 작용한다: 다른 사람과 상호 작용할 때, 우리는 미묘하고 무의식적으로 그들의 얼굴 표정, 제스처, 자세, 그리고 목소리의 높낮이를 흉내 낸다.", voca: ["subtly:미묘하게", "unconsciously:무의식적으로", "mimic:흉내 내다", "posture:자세", "vocal pitch:목소리 높낮이", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Then, via the interoception of our own bodies’ signals, we perceive what the other person is feeling because we feel it in ourselves.", ko: "그러고 나서, 우리 자신의 신체 신호에 대한 내부 감각을 통해, 우리는 우리 자신 안에서 그것을 느끼기 때문에 다른 사람이 느끼고 있는 것을 지각한다.", voca: ["signals:신호", "perceive:지각하다/인지하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We bring other people’s feelings onboard, and the body is the bridge.", ko: "우리는 다른 사람의 감정을 우리 안으로 가져오며, 신체가 그 다리 역할을 한다.", voca: ["onboard:안으로/탑승하여", "bridge:다리", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In an act similar to taking a bite off our partner’s plate, or borrowing an earbud to hear the song our friend is listening to, we are sampling their emotions.", ko: "파트너의 접시에서 한 입 베어 물거나, 친구가 듣고 있는 노래를 듣기 위해 이어폰 한쪽을 빌리는 것과 비슷한 행동으로, 우리는 그들의 감정을 샘플링하고 있는 것이다.", voca: ["taking a bite:한 입 베어 물다", "borrowing:빌리는 것", "sampling:샘플링/시식", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Body as an Emotional Bridge</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 뇌의 한계와 신체의 역할</span><div class="struct-text">뇌 스스로는 타인의 마음과 감정에 직접 접근할 수 없으므로, 신체가 부족한 정보를 공급하는 중요한 통로 역할을 합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 무의식적 모방과 내부 감각 피드백</span><div class="struct-text">타인과 상호 작용할 때 우리는 무의식적으로 표정과 자세를 흉내 내며, 이를 통해 발생하는 우리 몸의 내부 감각 신호를 뇌가 인지하게 됩니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 타인의 감정을 샘플링하는 신체</span><div class="struct-text">결국 신체는 타인의 감정을 우리 안으로 가져오는 '다리'가 되어, 우리가 마치 음식을 맛보듯 타인의 감정을 직접 경험(샘플링)하게 합니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">신체의 무의식적 모방과 내부 감각을 통한 타인과의 정서적 공감 메커니즘</span><span class="topic-eng">The mechanism of emotional empathy through subconscious mimicry and interoception of the body.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function handleNext() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { window.location.href = '../../index.html'; } }
+    function handlePrev() { if (currentIdx > 0) { currentIdx--; render(); } else { window.location.href = '../../index.html'; } }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank'; sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) { sp.classList.add('revealed'); sp.style.borderBottomColor = 'transparent'; }
+            sp.onclick = function() { this.classList.add('revealed'); this.style.borderBottomColor = 'transparent'; playTTS(w.replace(/[.,'"]/g, "")); };
+            c.appendChild(sp);
+        });
+    }
+    
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>
