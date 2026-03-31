@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master - EBS 6-12</title>
+    <title>English Master - Breathing and Performance</title>
     <style>
         :root { 
             --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
@@ -14,12 +14,9 @@
         .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
         #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         .hidden { display: none !important; }
-        
-        /* 🍎 버튼 높이 및 정렬 완벽 일치 */
         .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
         .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
         .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
-        
         .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
         .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
         .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
@@ -27,7 +24,7 @@
         .struct-item:last-child { border: none; }
         .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
         .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
-        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
         .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
         .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
         .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
@@ -41,28 +38,27 @@
         .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
         .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
         .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
-        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
-        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
     </style>
 </head>
 <body>
 <div class="phone-container">
-    <div class="header" id="header-title">English Master - EBS 6-12</div>
+    <div class="header" id="header-title">English Master - EBS MT2-24</div>
     <div id="display-area"></div>
     <div id="nav-area" class="nav-btns-fixed hidden">
-        <button class="btn-prev" onclick="prevSentence()">PREV</button>
-        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+        <button class="btn-prev" onclick="handlePrev()">PREV</button>
+        <button class="btn-next" onclick="handleNext()" id="main-next-btn">NEXT</button>
     </div>
 </div>
 <script>
     const fullData = [
-        { en: "Training and competition naturally speed the breath, which activates the sympathetic nervous system.", ko: "훈련과 경기는 자연스럽게 호흡을 빠르게 하며, 이는 교감 신경계를 활성화합니다.", voca: ["competition:경기", "naturally:자연스럽게", "activates:활성화하다", "sympathetic:교감 신경의", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "In performance, this is acceptable because an athlete wants to produce adrenaline and compete and train in an aroused state.", ko: "경기 중에는 운동선수가 아드레날린을 생성하고 각성된 상태에서 경쟁하고 훈련하기를 원하기 때문에 이것이 허용됩니다.", voca: ["performance:수행/경기", "acceptable:허용되는", "adrenaline:아드레날린", "aroused:각성된", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "However, it is equally important for an athlete to learn how to mentally and physically downshift from the acute sympathetic activity experienced in sport, and outside of performance focus their attention on slow breathing to reduce the sympathetic activity and resolve the fight-or-flight state.", ko: "하지만 운동선수에게는 스포츠에서 경험하는 급성 교감 신경 활동으로부터 정신적, 신체적으로 기어를 낮추는 법을 배우고, 경기 이외의 시간에는 교감 신경 활동을 줄이고 투쟁 도피 상태를 해소하기 위해 느린 호흡에 주의를 집중하는 것이 똑같이 중요합니다.", voca: ["downshift:속도를 낮추다", "acute:급성의", "resolve:해소하다", "fight-or-flight:투쟁 혹은 도피", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "In the Feinstein Institutes study, participants were able to use the pace of their breathing to activate specific regions of the brain.", ko: "Feinstein 연구소의 연구에서, 참가자들은 뇌의 특정 영역을 활성화하기 위해 자신의 호흡 속도를 사용할 수 있었습니다.", voca: ["participants:참가자", "pace:속도", "specific:특정한", "regions:영역", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "In a performance realm, this means athletes can use breathing pace to manage their state of arousal.", ko: "경기 영역에서 이것은 운동선수들이 자신의 각성 상태를 관리하기 위해 호흡 속도를 사용할 수 있다는 것을 의미합니다.", voca: ["realm:영역", "manage:관리하다", "arousal:각성", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "During training and competition, the breathing rate increases with the introduction of adrenaline, and athletes must be able to control this to be able to adapt and recover.", ko: "훈련과 경기 중에는 아드레날린의 유입으로 호흡률이 증가하며, 운동선수는 적응하고 회복하기 위해 이를 조절할 수 있어야 합니다.", voca: ["introduction:도입/유입", "control:조절하다", "adapt:적응하다", "recover:회복하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "One way is to practice slower breathing protocols outside of training and competition.", ko: "한 가지 방법은 훈련과 경기 이외의 시간에 더 느린 호흡 프로토콜을 연습하는 것입니다.", voca: ["practice:연습하다", "protocols:프로토콜/절차", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+        { en: "Training and competition naturally speed the breath, which activates the sympathetic nervous system.", ko: "훈련과 경기는 자연스럽게 호흡을 빠르게 하며, 이는 교감 신경계를 활성화한다.", voca: ["competition:경기", "naturally:자연스럽게", "activates:활성화하다", "sympathetic:교감 신경의", "nervous system:신경계", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In performance, this is acceptable because an athlete wants to produce adrenaline and compete and train in an aroused state.", ko: "경기 중에는 선수가 아드레날린을 생성하고 각성된 상태에서 경쟁하고 훈련하기를 원하기 때문에 이것은 허용된다.", voca: ["performance:수행/경기", "acceptable:허용되는", "produce:생성하다", "aroused state:각성된 상태", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "However, it is equally important for an athlete to learn how to mentally and physically downshift from the acute sympathetic activity experienced in sport, and outside of performance focus their attention on slow breathing to reduce the sympathetic activity and resolve the fight-or-flight state.", ko: "하지만 선수가 스포츠에서 경험하는 급성 교감 신경 활동으로부터 정신적, 신체적으로 기어를 낮추는 법을 배우고, 경기 외적으로는 교감 신경 활동을 줄이고 투쟁 도피 상태를 해소하기 위해 느린 호흡에 주의를 집중하는 것도 똑같이 중요하다.", voca: ["equally:똑같이", "downshift:속도를 낮추다", "acute:급성의", "resolve:해소하다", "fight-or-flight:투쟁 도피의", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In the Feinstein Institutes study, participants were able to use the pace of their breathing to activate specific regions of the brain.", ko: "Feinstein 연구소의 연구에서, 참가자들은 호흡 속도를 이용해 뇌의 특정 영역을 활성화할 수 있었다.", voca: ["participants:참가자", "pace:속도", "specific regions:특정 영역", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In a performance realm, this means athletes can use breathing pace to manage their state of arousal.", ko: "수행 영역에서, 이것은 선수들이 각성 상태를 관리하기 위해 호흡 속도를 사용할 수 있음을 의미한다.", voca: ["realm:영역", "manage:관리하다", "arousal:각성", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "During training and competition, the breathing rate increases with the introduction of adrenaline, and athletes must be able to control this to be able to adapt and recover.", ko: "훈련과 경기 중에는 아드레날린의 도입과 함께 호흡률이 증가하며, 선수들은 적응하고 회복하기 위해 이것을 조절할 수 있어야 한다.", voca: ["breathing rate:호흡률", "introduction:도입", "adapt:적응하다", "recover:회복하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "One way is to practice slower breathing protocols outside of training and competition.", ko: "한 가지 방법은 훈련과 경기 외적인 시간에 더 느린 호흡 프로토콜을 연습하는 것이다.", voca: ["practice:연습하다", "protocols:프로토콜/절차", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
     ];
 
     let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
@@ -71,14 +67,14 @@
         const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
         if (currentMode === 'INTRO') {
             header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
-            area.innerHTML = `<div class="main-title-card"><h1>Breathing & Performance</h1></div>
+            area.innerHTML = `<div class="main-title-card"><h1>Breathing and Arousal Control</h1></div>
                 <div class="structure-container">
-                    <div class="struct-item"><span class="struct-label">📍 서론: 경기 중 호흡과 교감신경</span><div class="struct-text">훈련과 경기 중의 빠른 호흡은 교감 신경을 활성화하여 선수를 각성 상태로 만듭니다.</div></div>
-                    <div class="struct-item"><span class="struct-label">📍 본론: 호흡 속도 조절의 중요성</span><div class="struct-text">선수는 경기 외 시간에 느린 호흡을 통해 교감 신경 활동을 줄이고 회복 상태로 전환하는 법을 배워야 합니다.</div></div>
-                    <div class="struct-item"><span class="struct-label">📍 결론: 뇌 활성화와 조절 연습</span><div class="struct-text">호흡 속도는 뇌의 특정 영역을 활성화하며, 평상시 느린 호흡 연습을 통해 각성 상태를 관리할 수 있습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 도입: 경기 중 호흡과 교감신경</span><div class="struct-text">훈련과 경기 중 빠른 호흡은 아드레날린 분비를 도와 각성 상태를 유지하지만, 경기 후에는 이를 해소하는 능력이 필요합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 호흡 속도로 조절하는 뇌 활성화</span><div class="struct-text">연구에 따르면 호흡 속도를 조절함으로써 뇌의 특정 부위를 활성화할 수 있으며, 이는 선수들이 스스로 각성 상태를 관리하는 도구가 됩니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 회복을 위한 느린 호흡 훈련</span><div class="struct-text">증가한 호흡률을 스스로 조절하여 적응하고 회복하기 위해, 평소 경기 외적인 시간에 느린 호흡법을 연습하는 것이 중요합니다.</div></div>
                 </div>
-                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">운동선수의 각성 조절과 회복을 위한 호흡 속도 관리의 중요성</span><span class="topic-eng">Importance of managing breathing pace for arousal control and recovery in athletes.</span></div>
-                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">경기 외적인 시간의 느린 호흡 연습을 통한 운동선수의 각성 관리와 회복력 강화</span><span class="topic-eng">Managing athletes' arousal and recovery through slow breathing practice outside of performance.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
         } else {
             const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
             document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
@@ -91,37 +87,25 @@
         }
     }
 
+    function handleNext() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { window.location.href = '../../index.html'; } }
+    function handlePrev() { if (currentIdx > 0) { currentIdx--; render(); } else { window.location.href = '../../index.html'; } }
+
     function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
-// 수정된 Step 3 빈칸 생성 로직
-function fillBlanks(s) {
-    const c = document.getElementById('blank-area');
-    // 영어에서 자주 쓰이는 전치사 목록
-    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
-
-    s.split(' ').forEach(w => {
-        const sp = document.createElement('span');
-        sp.className = 'word-blank';
-        sp.innerText = w;
-        
-        // 단어에서 문장부호를 제거하고 소문자로 변환하여 전치사인지 확인
-        const pureWord = w.toLowerCase().replace(/[.,'":;]/g, "");
-        
-        if (prepositions.includes(pureWord)) {
-            // 전치사라면 처음부터 보여줌
-            sp.classList.add('revealed');
-            sp.style.borderBottomColor = 'transparent'; // 밑줄 제거
-        }
-
-        sp.onclick = function() {
-            this.classList.add('revealed');
-            this.style.borderBottomColor = 'transparent';
-            playTTS(w.replace(/[.,'"]/g, ""));
-        };
-        c.appendChild(sp);
-    });
-}    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
-    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
-    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank'; sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) { sp.classList.add('revealed'); sp.style.borderBottomColor = 'transparent'; }
+            sp.onclick = function() { this.classList.add('revealed'); this.style.borderBottomColor = 'transparent'; playTTS(w.replace(/[.,'"]/g, "")); };
+            c.appendChild(sp);
+        });
+    }
+    
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
     function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
     function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
     window.onload = render;

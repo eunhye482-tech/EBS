@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master - EBS 6-8</title>
+    <title>English Master - Commitment to Objective Truth</title>
     <style>
         :root { 
             --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
@@ -14,12 +14,9 @@
         .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
         #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         .hidden { display: none !important; }
-        
-        /* 🍎 버튼 높이 완벽 일치 수정 */
         .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
         .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
         .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
-        
         .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
         .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
         .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
@@ -27,7 +24,7 @@
         .struct-item:last-child { border: none; }
         .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
         .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
-        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
         .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
         .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
         .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
@@ -41,31 +38,29 @@
         .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
         .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
         .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
-        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
-        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
     </style>
 </head>
 <body>
 <div class="phone-container">
-    <div class="header" id="header-title">English Master - EBS 6-8</div>
+    <div class="header" id="header-title">English Master - EBS MT2-26</div>
     <div id="display-area"></div>
     <div id="nav-area" class="nav-btns-fixed hidden">
-        <button class="btn-prev" onclick="prevSentence()">PREV</button>
-        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+        <button class="btn-prev" onclick="handlePrev()">PREV</button>
+        <button class="btn-next" onclick="handleNext()" id="main-next-btn">NEXT</button>
     </div>
 </div>
 <script>
     const fullData = [
-        { en: "It is a myth that all ideas are equally valid, even those with little or no objective proof.", ko: "객관적인 증거가 거의 없거나 전혀 없는 아이디어조차도 모든 아이디어가 똑같이 타당하다는 것은 근거 없는 믿음입니다.", voca: ["myth:근거 없는 믿음", "equally:똑같이", "valid:타당한", "objective:객관적인", "proof:증거", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "The existence of science is the commitment to objective truth.", ko: "과학의 존재는 객관적 진리에 대한 헌신입니다.", voca: ["existence:존재", "commitment:헌신", "objective truth:객관적 진리", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "After all, science is true: fire is hot, the wheel is efficient, birds and planes can fly, we’ve landed on a comet and traveled to the Moon, antibiotics treat illness, and immunizations keep us from getting sick.", ko: "결국 과학은 사실입니다. 불은 뜨겁고, 바퀴는 효율적이며, 새와 비행기는 날 수 있고, 우리는 혜성에 착륙하고 달을 여행했으며, 항생제는 질병을 치료하고 예방 접종은 우리가 병에 걸리지 않게 해줍니다.", voca: ["efficient:효율적인", "comet:혜성", "antibiotics:항생제", "treat:치료하다", "immunizations:예방 접종", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "These accomplishments are made possible by objective truths.", ko: "이러한 업적들은 객관적인 진리 덕분에 가능해졌습니다.", voca: ["accomplishments:업적", "possible:가능한", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "A plausible theory can, and frequently does, push science forward.", ko: "그럴듯한 이론은 과학을 앞으로 밀고 나갈 수 있고, 실제로 자주 그렇게 합니다.", voca: ["plausible:그럴듯한", "frequently:빈번하게", "push forward:추진하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "However, an intuition must be followed with testing that confirms or disproves its veracity.", ko: "하지만 직관은 그것의 진실성을 확인하거나 반증하는 테스트가 뒤따라야 합니다.", voca: ["intuition:직관", "confirms:확인하다", "disproves:반증하다", "veracity:진실성", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "If a theory is disproved, one should consider it as a reason to reject or alter the hypothesis, not a justification to just keep firmly holding to the hypothesis because you are instinctively wedded to it.", ko: "이론이 틀렸음이 입증되면 그것을 가설을 거부하거나 수정해야 할 이유로 여겨야 하며, 단지 본능적으로 그 가설에 얽매여 있다는 이유로 가설을 굳게 유지하는 정당화로 여겨서는 안 됩니다.", voca: ["reject:거부하다", "alter:수정하다", "hypothesis:가설", "justification:정당화", "instinctively:본능적으로", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Critical thinking is an absolute must, and we must respect evidence.", ko: "비판적 사고는 절대적인 필수 요소이며, 우리는 증거를 존중해야 합니다.", voca: ["critical thinking:비판적 사고", "absolute:절대적인", "respect:존중하다", "evidence:증거", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "It’s the only reason for anyone to trust anything about reality.", ko: "그것이 누구든 현실에 대해 무엇인가를 신뢰할 수 있는 유일한 이유입니다.", voca: ["trust:신뢰하다", "reality:현실", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Without testing and evidence, intuition is useful, but it is never the ultimate word.", ko: "테스트와 증거가 없다면 직관은 유용할지 모르지만, 결코 최종적인 결론이 될 수는 없습니다.", voca: ["ultimate:최종적인", "word:결론/말", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+        { en: "It is a myth that all ideas are equally valid, even those with little or no objective proof.", ko: "모든 아이디어가 똑같이 유효하다는 것은 근거 없는 믿음이며, 심지어 객관적인 증거가 거의 없거나 전혀 없는 것들조차 그렇다.", voca: ["myth:근거 없는 믿음", "equally:똑같이", "valid:유효한", "objective proof:객관적 증거", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The existence of science is the commitment to objective truth.", ko: "과학의 존재는 객관적인 진실에 대한 헌신이다.", voca: ["existence:존재", "commitment:헌신/약속", "objective truth:객관적 진실", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "After all, science is true: fire is hot, the wheel is efficient, birds and planes can fly, we’ve landed on a comet and traveled to the Moon, antibiotics treat illness, and immunizations keep us from getting sick.", ko: "결국 과학은 사실이다. 불은 뜨겁고, 바퀴는 효율적이며, 새와 비행기는 날 수 있고, 우리는 혜성에 착륙하고 달로 여행했으며, 항생제는 질병을 치료하고 예방 접종은 우리가 병에 걸리지 않게 해 준다.", voca: ["efficient:효율적인", "landed:착륙했다", "comet:혜성", "antibiotics:항생제", "immunizations:예방 접종", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "These accomplishments are made possible by objective truths.", ko: "이러한 업적들은 객관적인 진실에 의해 가능해졌다.", voca: ["accomplishments:업적", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "A plausible theory can, and frequently does, push science forward.", ko: "타당해 보이는 이론은 과학을 앞으로 나아가게 할 수 있고, 실제로 자주 그렇게 한다.", voca: ["plausible:타당해 보이는", "theory:이론", "frequently:자주", "push forward:앞으로 밀고 나가다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "However, an intuition must be followed with testing that confirms or disproves its veracity.", ko: "하지만 직관은 그것의 진실성을 확인하거나 반증하는 테스트가 뒤따라야 한다.", voca: ["intuition:직관", "followed with:~이 뒤따르다", "confirms:확인하다", "disproves:반증하다/틀렸음을 입증하다", "veracity:진실성", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "If a theory is disproved, one should consider it as a reason to reject or alter the hypothesis, not a justification to just keep firmly holding to the hypothesis because you are instinctively wedded to it.", ko: "만약 어떤 이론이 틀렸음이 입증된다면, 그것을 가설을 거부하거나 수정해야 할 이유로 여겨야 하며, 단지 본능적으로 그 가설에 집착하기 때문에 가설을 굳게 고수하기 위한 정당화로 여겨서는 안 된다.", voca: ["reject:거부하다", "alter:수정하다", "hypothesis:가설", "justification:정당화", "instinctively:본능적으로", "wedded to:~에 집착하는", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Critical thinking is an absolute must, and we must respect evidence. It’s the only reason for anyone to trust anything about reality.", ko: "비판적 사고는 절대적인 필수 사항이며, 우리는 증거를 존중해야 한다. 그것이 누군가가 현실에 관한 그 어떤 것이든 신뢰할 수 있는 유일한 이유이다.", voca: ["Critical thinking:비판적 사고", "absolute must:절대적 필수 사항", "respect:존중하다", "evidence:증거", "reality:현실", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Without testing and evidence, intuition is useful, but it is never the ultimate word.", ko: "테스트와 증거가 없다면 직관은 유용하지만, 결코 최종적인 결론이 될 수는 없다.", voca: ["ultimate:최종적인/궁극적인", "word:결론/말", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
     ];
 
     let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
@@ -74,14 +69,14 @@
         const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
         if (currentMode === 'INTRO') {
             header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
-            area.innerHTML = `<div class="main-title-card"><h1>Objective Truth & Evidence</h1></div>
+            area.innerHTML = `<div class="main-title-card"><h1>Commitment to Objective Truth</h1></div>
                 <div class="structure-container">
-                    <div class="struct-item"><span class="struct-label">📍 서론: 객관적 증거의 중요성</span><div class="struct-text">모든 아이디어가 타당하다는 것은 오해이며, 과학은 객관적 진리를 지향합니다.</div></div>
-                    <div class="struct-item"><span class="struct-label">📍 본론: 과학적 성취와 검증의 과정</span><div class="struct-text">인류의 업적은 객관적 진리에 기반하며, 직관은 반드시 엄격한 테스트를 통해 검증되어야 합니다.</div></div>
-                    <div class="struct-item"><span class="struct-label">📍 결론: 비판적 사고와 증거 존중</span><div class="struct-text">증거와 테스트 없는 직관은 최종적인 가치를 가질 수 없으며 비판적 사고가 필수적입니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 도입: 객관적 진실에 대한 과학의 헌신</span><div class="struct-text">모든 생각이 유효한 것이 아니며, 과학은 증거를 통한 객관적 진실을 추구합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 테스트를 통한 가설의 검증</span><div class="struct-text">직관이나 타당해 보이는 이론은 반드시 진실성을 확인하는 테스트를 거쳐야 하며, 틀렸음이 입증되면 가설을 수정하거나 거부해야 합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 비판적 사고와 증거 존중</span><div class="struct-text">현실을 신뢰할 수 있는 유일한 근거는 증거이며, 비판적 사고와 테스트 없이는 직관이 결코 최종적인 결론이 될 수 없습니다.</div></div>
                 </div>
-                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">객관적 진리와 과학적 증거를 바탕으로 한 비판적 사고의 중요성</span><span class="topic-eng">The importance of critical thinking based on objective truth and evidence.</span></div>
-                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">객관적 증거와 테스트를 통한 과학적 진실 규명의 중요성</span><span class="topic-eng">The importance of scientific truth through objective evidence and testing.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
         } else {
             const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
             document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
@@ -94,37 +89,25 @@
         }
     }
 
+    function handleNext() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { window.location.href = '../../index.html'; } }
+    function handlePrev() { if (currentIdx > 0) { currentIdx--; render(); } else { window.location.href = '../../index.html'; } }
+
     function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
-// 수정된 Step 3 빈칸 생성 로직
-function fillBlanks(s) {
-    const c = document.getElementById('blank-area');
-    // 영어에서 자주 쓰이는 전치사 목록
-    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
-
-    s.split(' ').forEach(w => {
-        const sp = document.createElement('span');
-        sp.className = 'word-blank';
-        sp.innerText = w;
-        
-        // 단어에서 문장부호를 제거하고 소문자로 변환하여 전치사인지 확인
-        const pureWord = w.toLowerCase().replace(/[.,'":;]/g, "");
-        
-        if (prepositions.includes(pureWord)) {
-            // 전치사라면 처음부터 보여줌
-            sp.classList.add('revealed');
-            sp.style.borderBottomColor = 'transparent'; // 밑줄 제거
-        }
-
-        sp.onclick = function() {
-            this.classList.add('revealed');
-            this.style.borderBottomColor = 'transparent';
-            playTTS(w.replace(/[.,'"]/g, ""));
-        };
-        c.appendChild(sp);
-    });
-}    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
-    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
-    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank'; sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) { sp.classList.add('revealed'); sp.style.borderBottomColor = 'transparent'; }
+            sp.onclick = function() { this.classList.add('revealed'); this.style.borderBottomColor = 'transparent'; playTTS(w.replace(/[.,'"]/g, "")); };
+            c.appendChild(sp);
+        });
+    }
+    
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
     function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
     function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
     window.onload = render;

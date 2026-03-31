@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - Architecture and CAD</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS MT2-26</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="handlePrev()">PREV</button>
+        <button class="btn-next" onclick="handleNext()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "In 2012, the Yale School of Architecture held a symposium called “Is Drawing Dead?”", ko: "2012년 예일대 건축학과는 '데생은 죽었는가?'라는 제목의 심포지엄을 열었다.", voca: ["architecture:건축학", "symposium:심포지엄", "Is Drawing Dead:데생은 죽었는가", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The bold title reflects a growing sense that the architect’s freehand sketch is being displaced by the computer.", ko: "그 대담한 제목은 건축가의 프리핸드 스케치가 컴퓨터에 의해 대체되고 있다는 커지는 느낌을 반영한다.", voca: ["bold:대담한", "reflects:반영하다", "freehand sketch:프리핸드 스케치", "displaced:대체된", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The transition from sketchpad to screen entails, many architects believe, a loss of creativity, of adventurousness.", ko: "스케치 패드에서 화면으로의 전환은 많은 건축가가 믿기에 창의성과 모험심의 상실을 수반한다.", voca: ["transition:전환", "entails:수반하다", "loss:상실", "creativity:창의성", "adventurousness:모험심", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Thanks to the precision and apparent completeness of screen renderings, a designer working at a computer has a tendency to lock in, visually and cognitively, on a design at an early stage.", ko: "화면 렌더링의 정밀함과 겉보기상의 완결성 덕분에, 컴퓨터로 작업하는 디자이너는 시각적으로나 인지적으로 초기 단계의 디자인에 고정되는 경향이 있다.", voca: ["precision:정밀함", "apparent:겉보기상의", "completeness:완결성", "tendency:경향", "cognitively:인지적으로", "early stage:초기 단계", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "He bypasses much of the reflective and exploratory playfulness that springs from the uncertainty and ambiguity of sketching.", ko: "그는 스케치의 불확실성과 모호함에서 솟아나는 성찰적이고 탐색적인 유희의 많은 부분을 건너뛴다.", voca: ["bypasses:건너뛰다", "reflective:성찰적인", "exploratory:탐색적인", "uncertainty:불확실성", "ambiguity:모호함", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Researchers term this phenomenon “premature fixation” and trace its cause to “the disincentive for design changes once a large amount of detail and interconnectedness is built too quickly into a CAD (Computer-Aided Design) model.”", ko: "연구원들은 이 현상을 ‘조기 고착’이라 부르며 그 원인을 ‘일단 많은 양의 세부 사항과 상호 연결성이 CAD(컴퓨터 보조 설계) 모델에 너무 빨리 구축되면 디자인 변경에 대한 의욕이 꺾이는 것’에서 찾는다.", voca: ["phenomenon:현상", "premature fixation:조기 고착", "disincentive:의욕을 꺾는 것/제약", "interconnectedness:상호 연결성", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The designer at the computer also tends to emphasize formal experimentation at the expense of expressiveness.", ko: "컴퓨터로 작업하는 디자이너는 또한 표현력을 희생하면서 형식적인 실험을 강조하는 경향이 있다.", voca: ["emphasize:강조하다", "formal experimentation:형식적인 실험", "at the expense of:~을 희생하여", "expressiveness:표현력", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "By weakening an architect’s “personal, emotional connection with the work,” a renowned American architect and designer Michael Graves argues, CAD software produces designs that, “while complex and interesting in their own way,” often “lack the emotional content of a design derived from hand.”", ko: "유명한 미국 건축가이자 디자이너인 Michael Graves는 CAD 소프트웨어가 건축가의 ‘작품과의 개인적, 정서적 연결’을 약화시킴으로써, ‘나름대로 복잡하고 흥미롭기는 하지만’ 종종 ‘손에서 유래한 디자인의 정서적 내용이 결여된’ 디자인을 만들어낸다고 주장한다.", voca: ["renowned:유명한", "emotional:정서적인", "complex:복잡한", "lack:결여되다/부족하다", "derived from:~에서 유래한", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Sketchpad vs. The Screen</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 수작업 데생의 위기</span><div class="struct-text">프리핸드 스케치가 컴퓨터로 대체되면서 건축 설계에서 창의성과 모험심이 상실되고 있다는 우려가 커지고 있습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 조기 고착(Premature Fixation)</span><div class="struct-text">컴퓨터 렌더링의 정밀함은 디자이너를 초기 단계에 고정시키며, 스케치 특유의 모호함에서 오는 탐색적 유희를 건너뛰게 만듭니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 정서적 내용의 결여</span><div class="struct-text">CAD는 복잡한 디자인은 가능케 하지만, 손으로 그린 작업이 주는 작품과의 정서적 연결과 깊이 있는 내용을 담아내는 데 한계가 있습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">디지털 설계 도구가 건축가의 창의적 유희와 정서적 표현력에 미치는 제약</span><span class="topic-eng">The constraints of digital design tools on an architect's creative playfulness and emotional expressiveness.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function handleNext() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { window.location.href = '../../index.html'; } }
+    function handlePrev() { if (currentIdx > 0) { currentIdx--; render(); } else { window.location.href = '../../index.html'; } }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank'; sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) { sp.classList.add('revealed'); sp.style.borderBottomColor = 'transparent'; }
+            sp.onclick = function() { this.classList.add('revealed'); this.style.borderBottomColor = 'transparent'; playTTS(w.replace(/[.,'"]/g, "")); };
+            c.appendChild(sp);
+        });
+    }
+    
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

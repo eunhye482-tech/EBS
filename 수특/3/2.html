@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master - EBS 6-3</title>
+    <title>English Master - Loyalty and Cause</title>
     <style>
         :root { 
             --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
@@ -14,12 +14,9 @@
         .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
         #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         .hidden { display: none !important; }
-        
-        /* 🍎 버튼 높이 완벽 일치 수정 */
         .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
         .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
         .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
-        
         .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
         .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
         .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
@@ -27,7 +24,7 @@
         .struct-item:last-child { border: none; }
         .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
         .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
-        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
         .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
         .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
         .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
@@ -41,30 +38,28 @@
         .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
         .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
         .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
-        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
-        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
     </style>
 </head>
 <body>
 <div class="phone-container">
-    <div class="header" id="header-title">English Master - EBS 6-3</div>
+    <div class="header" id="header-title">English Master - EBS MT2-22</div>
     <div id="display-area"></div>
     <div id="nav-area" class="nav-btns-fixed hidden">
-        <button class="btn-prev" onclick="prevSentence()">PREV</button>
-        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+        <button class="btn-prev" onclick="handlePrev()">PREV</button>
+        <button class="btn-next" onclick="handleNext()" id="main-next-btn">NEXT</button>
     </div>
 </div>
 <script>
     const fullData = [
-        { en: "Energy can always be injected into an organization to motivate people to do things.", ko: "사람들이 일을 하도록 동기를 부여하기 위해 에너지는 항상 조직에 주입될 수 있습니다.", voca: ["injected:주입된", "organization:조직", "motivate:동기부여하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Bonuses, promotions, other carrots, and even a few sticks can get people to work harder, for sure, but the gains are, like all manipulations, short-term.", ko: "보너스, 승진, 다른 당근들, 그리고 심지어 몇 개의 채찍도 확실히 사람들이 더 열심히 일하게 만들 수 있지만, 모든 조작과 마찬가지로 그 이득은 단기적입니다.", voca: ["promotions:승진", "carrots:당근(보상)", "sticks:채찍(처벌)", "manipulations:조작", "short-term:단기적인", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Over time, such tactics cost more money and increase stress for employee and employer alike, and eventually will become the main reason people show up for work every day.", ko: "시간이 지나면서, 그러한 전술은 직원과 고용주 모두에게 더 많은 비용을 치르게 하고 스트레스를 증가시키며, 결국 사람들이 매일 출근하는 주된 이유가 될 것입니다.", voca: ["tactics:전술", "employer:고용주", "alike:마찬가지로", "eventually:결국", "show up:나타나다", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "That’s not loyalty. That’s the employee version of repeat business.", ko: "그것은 충성심이 아닙니다. 그것은 '반복 거래'의 직원 버전일 뿐입니다.", voca: ["loyalty:충성심", "version:버전", "repeat business:반복 거래", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Loyalty among employees is when they turn down more money or benefits to continue working at the same company.", ko: "직원들 사이의 충성심이란 그들이 같은 회사에서 계속 일하기 위해 더 많은 돈이나 혜택을 거절할 때입니다.", voca: ["turn down:거절하다", "benefits:혜택", "continue:계속하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Loyalty to a company trumps pay and benefits.", ko: "회사에 대한 충성심은 급여와 혜택을 능가합니다.", voca: ["trumps:능가하다/이기다", "pay:급여", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "And unless you’re an astronaut, it’s not the work we do that inspires us either.", ko: "그리고 여러분이 우주비행사가 아닌 한, 우리에게 영감을 주는 것은 우리가 하는 일도 아닙니다.", voca: ["unless:~이 아닌 한", "astronaut:우주비행사", "inspires:영감을 주다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "It’s the cause that we come to work for.", ko: "우리가 일하러 오는 이유는 바로 '대의(명분)' 때문입니다.", voca: ["cause:대의/원인", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "We don’t want to come to work to build a wall; we want to come to work to build a cathedral.", ko: "우리는 단지 벽을 쌓기 위해 출근하고 싶어 하는 것이 아니라, 대성당을 짓기 위해 출근하고 싶어 합니다.", voca: ["build:짓다/쌓다", "cathedral:대성당", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+        { en: "Energy can always be injected into an organization to motivate people to do things.", ko: "사람들이 일을 하도록 동기를 부여하기 위해 항상 조직에 에너지가 주입될 수 있다.", voca: ["injected:주입된", "organization:조직", "motivate:동기 부여하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Bonuses, promotions, other carrots, and even a few sticks can get people to work harder, for sure, but the gains are, like all manipulations, short-term.", ko: "보너스, 승진, 다른 당근들, 그리고 심지어 몇 가지 채찍조차 사람들을 확실히 더 열심히 일하게 할 수 있지만, 그 이득은 모든 조작과 마찬가지로 단기적이다.", voca: ["promotions:승진", "carrots:당근(보상)", "sticks:채찍(처벌)", "manipulations:조작", "short-term:단기적인", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Over time, such tactics cost more money and increase stress for employee and employer alike, and eventually will become the main reason people show up for work every day.", ko: "시간이 지나면서, 그러한 전술은 직원과 고용주 모두에게 더 많은 비용을 치르게 하고 스트레스를 증가시키며, 결국 사람들이 매일 출근하는 주된 이유가 될 것이다.", voca: ["tactics:전술", "employee:직원", "employer:고용주", "eventually:결국", "show up:나타나다/출근하다", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "That’s not loyalty. That’s the employee version of repeat business.", ko: "그것은 충성도가 아니다. 그것은 반복 거래의 직원 버전일 뿐이다.", voca: ["loyalty:충성도", "repeat business:반복 거래", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Loyalty among employees is when they turn down more money or benefits to continue working at the same company.", ko: "직원들 사이의 충성도는 그들이 같은 회사에서 계속 일하기 위해 더 많은 돈이나 혜택을 거절할 때이다.", voca: ["turn down:거절하다", "benefits:혜택", "continue:계속하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Loyalty to a company trumps pay and benefits.", ko: "회사에 대한 충성도는 급여와 혜택보다 더 중요하다.", voca: ["trumps:~보다 더 중요하다/이기다", "pay:급여", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "And unless you’re an astronaut, it’s not the work we do that inspires us either. It’s the cause that we come to work for.", ko: "그리고 당신이 우주비행사가 아닌 한, 우리에게 영감을 주는 것은 우리가 하는 일도 아니다. 그것은 우리가 일을 하러 오는 대의이다.", voca: ["astronaut:우주비행사", "inspires:영감을 주다", "cause:대의/명분", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We don’t want to come to work to build a wall; we want to come to work to build a cathedral.", ko: "우리는 벽을 쌓기 위해 일하러 오는 것을 원하지 않는다. 우리는 성당을 짓기 위해 일하러 오기를 원한다.", voca: ["build:짓다", "wall:벽", "cathedral:성당", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
     ];
 
     let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
@@ -73,14 +68,14 @@
         const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
         if (currentMode === 'INTRO') {
             header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
-            area.innerHTML = `<div class="main-title-card"><h1>Loyalty vs. Manipulation</h1></div>
+            area.innerHTML = `<div class="main-title-card"><h1>True Loyalty and the Cause</h1></div>
                 <div class="structure-container">
-                    <div class="struct-item"><span class="struct-label">📍 서론: 단기적 동기부여의 한계</span><div class="struct-text">보상과 처벌은 단기적 효과는 있으나 장기적으로는 비용과 스트레스만 높입니다.</div></div>
-                    <div class="struct-item"><span class="struct-label">📍 본론: 진정한 충성심의 정의</span><div class="struct-text">충성심은 더 좋은 조건을 거절하고 남는 것이며, 이는 보상을 초월하는 가치입니다.</div></div>
-                    <div class="struct-item"><span class="struct-label">📍 결론: 대의(Cause)의 중요성</span><div class="struct-text">사람을 움직이는 것은 단순한 작업이 아니라, 우리가 일하는 목적과 대의입니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 도입: 외부적 보상의 한계</span><div class="struct-text">보너스나 승진 같은 단기적 유인책은 결국 비용과 스트레스를 높이며, 진정한 충성도를 만들어내지 못합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 충성도의 진정한 의미</span><div class="struct-text">진정한 충성도는 더 나은 보상을 거절하고서라도 회사에 남는 것이며, 이는 급여나 혜택보다 훨씬 상위의 가치입니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 일의 영감, '대의'</span><div class="struct-text">사람을 움직이는 것은 업무 그 자체가 아니라 그 일을 하는 '대의'입니다. 우리는 단순한 벽이 아니라 위대한 성당을 짓기 위해 출근하고 싶어 합니다.</div></div>
                 </div>
-                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">조직의 지속 가능한 동기부여를 위한 진정한 충성심과 대의의 역할</span><span class="topic-eng">The role of true loyalty and cause for sustainable motivation in organizations.</span></div>
-                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">직원 충성도의 근원으로서의 대의와 외부적 보상의 한계</span><span class="topic-eng">The limits of external incentives and the power of a 'cause' as the source of true employee loyalty.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
         } else {
             const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
             document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
@@ -93,37 +88,25 @@
         }
     }
 
+    function handleNext() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { window.location.href = '../../index.html'; } }
+    function handlePrev() { if (currentIdx > 0) { currentIdx--; render(); } else { window.location.href = '../../index.html'; } }
+
     function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
-// 수정된 Step 3 빈칸 생성 로직
-function fillBlanks(s) {
-    const c = document.getElementById('blank-area');
-    // 영어에서 자주 쓰이는 전치사 목록
-    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
-
-    s.split(' ').forEach(w => {
-        const sp = document.createElement('span');
-        sp.className = 'word-blank';
-        sp.innerText = w;
-        
-        // 단어에서 문장부호를 제거하고 소문자로 변환하여 전치사인지 확인
-        const pureWord = w.toLowerCase().replace(/[.,'":;]/g, "");
-        
-        if (prepositions.includes(pureWord)) {
-            // 전치사라면 처음부터 보여줌
-            sp.classList.add('revealed');
-            sp.style.borderBottomColor = 'transparent'; // 밑줄 제거
-        }
-
-        sp.onclick = function() {
-            this.classList.add('revealed');
-            this.style.borderBottomColor = 'transparent';
-            playTTS(w.replace(/[.,'"]/g, ""));
-        };
-        c.appendChild(sp);
-    });
-}    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
-    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
-    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank'; sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) { sp.classList.add('revealed'); sp.style.borderBottomColor = 'transparent'; }
+            sp.onclick = function() { this.classList.add('revealed'); this.style.borderBottomColor = 'transparent'; playTTS(w.replace(/[.,'"]/g, "")); };
+            c.appendChild(sp);
+        });
+    }
+    
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
     function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
     function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
     window.onload = render;

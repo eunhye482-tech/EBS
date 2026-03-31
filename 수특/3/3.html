@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master - EBS 6-4</title>
+    <title>English Master - DNA as History</title>
     <style>
         :root { 
             --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
@@ -14,12 +14,9 @@
         .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
         #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         .hidden { display: none !important; }
-        
-        /* 🍎 버튼 높이 완벽 일치 및 정렬 최적화 */
         .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
         .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
         .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
-        
         .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
         .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
         .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
@@ -27,7 +24,7 @@
         .struct-item:last-child { border: none; }
         .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
         .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
-        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
         .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
         .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
         .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
@@ -41,27 +38,26 @@
         .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
         .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
         .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
-        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
-        .btn-start-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
     </style>
 </head>
 <body>
 <div class="phone-container">
-    <div class="header" id="header-title">English Master - EBS 6-4</div>
+    <div class="header" id="header-title">English Master - EBS MT2-23</div>
     <div id="display-area"></div>
     <div id="nav-area" class="nav-btns-fixed hidden">
-        <button class="btn-prev" onclick="prevSentence()">PREV</button>
-        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+        <button class="btn-prev" onclick="handlePrev()">PREV</button>
+        <button class="btn-next" onclick="handleNext()" id="main-next-btn">NEXT</button>
     </div>
 </div>
 <script>
     const fullData = [
-        { en: "In the early 1960s the great American writer James Baldwin wrote: “People are trapped in history, and history is trapped in them.”", ko: "1960년대 초 미국의 위대한 작가 제임스 볼드윈은 '사람들은 역사 속에 갇혀 있고, 역사는 그들 속에 갇혀 있다'고 썼습니다.", voca: ["trapped:갇힌", "history:역사", "penned:쓰다/기록하다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "He was speaking to race when he penned those words.", ko: "그가 그 말을 썼을 때 그는 인종에 대해 말하고 있었습니다.", voca: ["speaking to:~에 대해 말하다", "race:인종", "penned:기록했다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "But the statement is equally true if the word “people” is replaced with “all of life on Earth, present and past,” for each strand of DNA, in each of our cells, is an ancient record of biological history, written in simple code and passed down from generation to generation.", ko: "하지만 '사람들'이라는 단어를 '현재와 과거의 지구상의 모든 생명체'로 바꾸어도 그 말은 똑같이 사실인데, 왜냐하면 우리 세포 하나하나에 있는 DNA의 각 가닥은 단순한 코드로 기록되어 세대에서 세대로 전해 내려오는 생물학적 역사의 고대 기록이기 때문입니다.", voca: ["equally:똑같이", "replaced:교체된", "strand:가닥", "ancient:고대의", "biological:생물학적인", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "One could say that DNA is nothing but history, one with a physical manifestation that was slowly blended and accumulated over countless eons by the most pitiless of all phenomena—natural selection.", ko: "DNA는 역사일 뿐이며, 모든 현상 중 가장 냉혹한 것인 자연 선택에 의해 수많은 세월 동안 서서히 혼합되고 축적된 물리적 징표를 가진 역사라고 말할 수 있습니다.", voca: ["nothing but:~일 뿐", "physical:물리적인", "manifestation:징표/드러남", "accumulated:축적된", "pitiless:냉혹한", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "DNA is a history that is inside us—and yet one that is our master as well, the blueprint for our bodies, and dictator of what we will pass on to our children, gifts that can be blessings or deadly time bombs.", ko: "DNA는 우리 안에 있는 역사이면서 또한 우리의 주인이기도 한데, 우리 몸의 청사진이자 우리가 자녀에게 물려줄 것, 즉 축복이 될 수도 있고 치명적인 시한폭탄이 될 수도 있는 선물을 결정하는 독재자입니다.", voca: ["blueprint:청사진", "dictator:독재자", "blessings:축복", "deadly:치명적인", "time bombs:시한폭탄", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "We are indeed trapped in this particular vehicle of history as much as it is trapped in us.", ko: "역사가 우리 안에 갇혀 있는 것만큼이나 우리는 참으로 이 특정한 역사의 운송 수단 안에 갇혀 있습니다.", voca: ["indeed:참으로", "particular:특정한", "vehicle:운송 수단/매개체", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+        { en: "In the early 1960s the great American writer James Baldwin wrote: “People are trapped in history, and history is trapped in them.”", ko: "1960년대 초 미국의 위대한 작가 제임스 볼드윈은 “사람은 역사에 갇혀 있고, 역사는 사람 안에 갇혀 있다.”라고 썼다.", voca: ["trapped:갇힌", "history:역사", "writer:작가", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "He was speaking to race when he penned those words.", ko: "그가 그 글을 썼을 때 그는 인종에 관해 이야기하고 있었다.", voca: ["speaking to:~에 관해 이야기하다", "race:인종", "penned:썼다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "But the statement is equally true if the word “people” is replaced with “all of life on Earth, present and past,” for each strand of DNA, in each of our cells, is an ancient record of biological history, written in simple code and passed down from generation to generation.", ko: "하지만 ‘사람’이라는 단어를 ‘현재와 과거의 지구상의 모든 생명체’로 바꾸어도 그 말은 똑같이 사실이다. 왜냐하면 우리 세포 하나하나에 들어 있는 각각의 DNA 가닥은 단순한 코드로 기록되어 세대에서 세대로 전해 내려온 생물학적 역사의 고대 기록이기 때문이다.", voca: ["statement:진술/말", "replaced with:~로 교체된", "strand:가닥", "ancient record:고대 기록", "biological:생물학적인", "passed down:전해 내려오는", "generation:세대", "🍎", "🍎", "🍎"] },
+        { en: "One could say that DNA is nothing but history, one with a physical manifestation that was slowly blended and accumulated over countless eons by the most pitiless of all phenomena—natural selection.", ko: "DNA는 역사 그 자체라고 말할 수 있는데, 그것은 모든 현상 중에서 가장 무자비한 자연선택에 의해 수많은 영겁의 시간에 걸쳐 천천히 혼합되고 축적된 물리적 징후를 가진 역사이다.", voca: ["nothing but:오직 ~일 뿐/그 자체", "physical manifestation:물리적 징후", "blended:혼합된", "accumulated:축적된", "pitiless:무자비한", "phenomena:현상", "natural selection:자연선택", "🍎", "🍎", "🍎"] },
+        { en: "DNA is a history that is inside us—and yet one that is our master as well, the blueprint for our bodies, and dictator of what we will pass on to our children, gifts that can be blessings or deadly time bombs.", ko: "DNA는 우리 안에 있는 역사이며, 또한 우리의 주인이기도 한데, 우리 몸의 설계도이자 우리가 자녀에게 물려줄 것의 독재자이며, 축복일 수도 있고 치명적인 시한폭탄일 수도 있는 선물이다.", voca: ["blueprint:설계도", "dictator:독재자", "pass on:물려주다", "blessings:축복", "deadly:치명적인", "time bombs:시한폭탄", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We are indeed trapped in this particular vehicle of history as much as it is trapped in us.", ko: "역사가 우리 안에 갇혀 있는 것만큼이나 우리도 참으로 이 특정한 역사의 매개체 안에 갇혀 있다.", voca: ["indeed:참으로", "particular:특정한", "vehicle:매개체/탈것", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
     ];
 
     let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
@@ -70,14 +66,14 @@
         const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
         if (currentMode === 'INTRO') {
             header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
-            area.innerHTML = `<div class="main-title-card"><h1>DNA: Biological History</h1></div>
+            area.innerHTML = `<div class="main-title-card"><h1>DNA as Biological History</h1></div>
                 <div class="structure-container">
-                    <div class="struct-item"><span class="struct-label">📍 서론: 인용구를 통한 도입</span><div class="struct-text">제임스 볼드윈의 말을 빌려, 생명체와 역사는 서로 떼려야 뗄 수 없는 관계임을 설명합니다.</div></div>
-                    <div class="struct-item"><span class="struct-label">📍 본론: DNA의 본질과 형성</span><div class="struct-text">DNA는 자연 선택에 의해 수억 년간 축적된 생물학적 기록이자 우리 몸의 청사진(독재자)입니다.</div></div>
-                    <div class="struct-item"><span class="struct-label">📍 결론: 역사와 생명의 상호 구속</span><div class="struct-text">우리는 우리 안에 갇힌 DNA라는 역사의 매개체에 갇혀 있는 존재임을 강조합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 도입: 인류와 역사의 상호 구속성</span><div class="struct-text">제임스 볼드윈의 말처럼 생명체와 역사는 서로에게 갇혀 있는 관계입니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: DNA에 기록된 진화의 역사</span><div class="struct-text">DNA는 자연선택이라는 무자비한 과정을 통해 수억 년간 축적된 생물학적 역사의 물리적 기록이자 암호입니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 우리의 운명을 결정짓는 DNA</span><div class="struct-text">DNA는 우리 몸의 설계도이자 주인으로서, 후손에게 축복이나 재앙을 물려주는 독재적인 역사의 매개체입니다.</div></div>
                 </div>
-                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">생물학적 역사의 고대 기록이자 인간의 청사진으로서의 DNA</span><span class="topic-eng">DNA as an ancient record of biological history and a blueprint for humans.</span></div>
-                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">DNA를 통해 생명체 안에 축적되고 세대로 이어지는 생물학적 역사의 본질</span><span class="topic-eng">The nature of biological history accumulated in DNA and passed through generations.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
         } else {
             const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
             document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
@@ -90,37 +86,25 @@
         }
     }
 
+    function handleNext() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { window.location.href = '../../index.html'; } }
+    function handlePrev() { if (currentIdx > 0) { currentIdx--; render(); } else { window.location.href = '../../index.html'; } }
+
     function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
-// 수정된 Step 3 빈칸 생성 로직
-function fillBlanks(s) {
-    const c = document.getElementById('blank-area');
-    // 영어에서 자주 쓰이는 전치사 목록
-    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
-
-    s.split(' ').forEach(w => {
-        const sp = document.createElement('span');
-        sp.className = 'word-blank';
-        sp.innerText = w;
-        
-        // 단어에서 문장부호를 제거하고 소문자로 변환하여 전치사인지 확인
-        const pureWord = w.toLowerCase().replace(/[.,'":;]/g, "");
-        
-        if (prepositions.includes(pureWord)) {
-            // 전치사라면 처음부터 보여줌
-            sp.classList.add('revealed');
-            sp.style.borderBottomColor = 'transparent'; // 밑줄 제거
-        }
-
-        sp.onclick = function() {
-            this.classList.add('revealed');
-            this.style.borderBottomColor = 'transparent';
-            playTTS(w.replace(/[.,'"]/g, ""));
-        };
-        c.appendChild(sp);
-    });
-}    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
-    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
-    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank'; sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) { sp.classList.add('revealed'); sp.style.borderBottomColor = 'transparent'; }
+            sp.onclick = function() { this.classList.add('revealed'); this.style.borderBottomColor = 'transparent'; playTTS(w.replace(/[.,'"]/g, "")); };
+            c.appendChild(sp);
+        });
+    }
+    
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
     function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
     function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
     window.onload = render;
