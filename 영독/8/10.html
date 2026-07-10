@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - Karl Mannheim's Sociology of Generations</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - Sociology of Generations</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="handlePrev()">PREV</button>
+        <button class="btn-next" onclick="handleNext()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "By the 1950s, social theorists began thinking and writing about age, aging, generations, and the life course. Their work remains relevant today.", ko: "1950년대에 이르러 사회 이론가들은 나이, 노화, 세대, 그리고 인생 행로에 대해 생각하고 글을 쓰기 시작했다. 그들의 연구는 오늘날에도 여전히 유효하다.", voca: ["social theorist:사회 이론가", "aging:노화", "generation:세대", "life course:인생 행로", "remain:남아있다", "relevant:유효한/관련있는", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The first serious attempt to look at the social importance of age groups was made by the German sociologist Karl Mannheim in an essay titled “The Problem of Generations,” which was first published in 1927.", ko: "연령 집단의 사회적 중요성을 바라본 첫 번째 진지한 시도는 1927년에 처음 발표된 독일 사회학자 Karl Mannheim의 “세대의 문제”라는 제목의 에세이에서 이루어졌다.", voca: ["serious:진지한/심각한", "attempt:시도", "social:사회적인", "importance:중요성", "sociologist:사회학자", "essay:에세이/수필", "publish:발표하다/출판하다", "🍎", "🍎", "🍎"] },
+        { en: "Mannheim defined generation as a category of people born within a specific historical era or time period.", ko: "Mannheim은 세대를 특정 역사적 시대나 기간 내에 태어난 사람들의 범주로 정의했다.", voca: ["define:정의하다", "category:범주", "within:~ 이내에", "specific:특정한", "historical era:역사적 시대", "time period:기간", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "For Mannheim, a generation was also characterized by common world views that distinguished it from other generations.", ko: "Mannheim에게 있어 한 세대는 그것을 다른 세대와 구별 짓는 공통된 세계관에 의해 특징지어지기도 했다.", voca: ["characterized:특징지어지는", "common:공통된", "world view:세계관", "distinguish:구별짓다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Mannheim was keenly aware that accident of birth timing did not automatically create these common understandings and worldviews;", ko: "Mannheim은 출생 시기의 우연이 이러한 공통된 이해와 세계관을 자동으로 만들어내지 않는다는 것을 날카롭게 인식하고 있었다.", voca: ["keenly aware:날카롭게 인식하는", "accident:우연/사고", "birth timing:출생 시기", "automatically:자동으로", "understanding:이해", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "he observed that social and social psychological processes led some members of a generation to develop an identity and consciousness with their age peers.", ko: "그는 사회적, 그리고 사회 심리적 과정이 한 세대의 일부 구성원들로 하여금 동년배들과의 정체성 및 의식을 발달시키도록 이끈다는 것을 관찰했다.", voca: ["observe:관찰하다", "psychological:심리적인", "process:과정", "lead A to B:A를 B로 이끌다", "member:구성원", "develop:발달시키다", "identity:정체성", "consciousness:의식", "age peer:동년배", "🍎"] },
+        { en: "Mannheim suggested that generational consciousness arose not from merely being born at the same time but from being exposed to the same kinds of experiences and historical events in a common social and political environment.", ko: "Mannheim은 세대 의식이 단지 같은 시기에 태어난 것에서 나오는 것이 아니라, 공통의 사회적, 정치적 환경에서 같은 종류의 경험과 역사적 사건에 노출되는 것에서 생겨난다고 제안했다.", voca: ["suggest:제안하다/시사하다", "arise from:~에서 생겨나다", "merely:단지/그저", "exposed to:~에 노출된", "experience:경험", "event:사건", "political:정치적인", "environment:환경", "not A but B:A가 아니라 B", "🍎"] },
+        { en: "According to Mannheim, belonging to a generation is a combination of a state of mind and an age grouping.", ko: "Mannheim에 따르면, 특정 세대에 속한다는 것은 정신적 상태(마음가짐)와 연령 집단화의 결합이다.", voca: ["according to:~에 따르면", "belong to:~에 속하다", "combination:결합", "state of mind:정신적 상태", "age grouping:연령 집단화", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Concept of Generation</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 세대 연구의 시작과 칼 만하임</span><div class="struct-text">1950년대부터 나이와 세대에 대한 학문적 연구가 본격화되었습니다. 연령 집단의 사회적 중요성을 규명한 최초의 진지한 시도는 1927년 독일의 사회학자 칼 만하임(Karl Mannheim)의 에세이에서 시작되었습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 단순한 출생 시기를 넘어선 세대의 정의</span><div class="struct-text">만하임은 세대를 '특정 시대에 태어나 타 세대와 구별되는 공통된 세계관을 가진 집단'으로 정의했습니다. 그는 단순히 같은 시기에 우연히 태어났다고 해서 공통의 정체성이 자동으로 생기지는 않는다고 보았습니다. 동년배들과 정체성 및 유대감을 형성하는 데는 사회 심리적 과정이 작용합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 세대 의식의 진짜 원천과 본질</span><div class="struct-text">진정한 세대 의식은 동일한 사회적·정치적 환경 안에서 '같은 종류의 역사적 사건과 경험에 노출될 때' 비로소 나타납니다. 즉, 특정 세대에 속한다는 것은 단순히 나이가 같은 것(연령 집단)뿐만 아니라, 공통된 마음가짐(정신적 상태)이 하나로 결합된 결과입니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">칼 만하임의 이론에 따른 연령 집단화와 공통의 역사적 경험을 통한 세대 의식의 형성 원리</span><span class="topic-eng">Karl Mannheim's theory on how generational consciousness forms through a combination of age and shared historical experiences.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function handleNext() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { window.location.href = '../../index.html'; } }
+    function handlePrev() { if (currentIdx > 0) { currentIdx--; render(); } else { window.location.href = '../../index.html'; } }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank'; sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) { sp.classList.add('revealed'); sp.style.borderBottomColor = 'transparent'; }
+            sp.onclick = function() { this.classList.add('revealed'); this.style.borderBottomColor = 'transparent'; playTTS(w.replace(/[.,'"]/g, "")); };
+            c.appendChild(sp);
+        });
+    }
+    
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

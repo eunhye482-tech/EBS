@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - Large Language Models</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - LLMs</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="handlePrev()">PREV</button>
+        <button class="btn-next" onclick="handleNext()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Large Language Models (LLMs) are extremely strong artificial intelligence (AI) systems that use sophisticated algorithms and enormous volumes of data to understand, interpret, and generate human language.", ko: "거대 언어 모델(LLM)은 정교한 알고리즘과 막대한 양의 데이터를 사용하여 인간의 언어를 이해, 해석, 생성하는 매우 강력한 인공지능(AI) 시스템이다.", voca: ["extremely:매우/극도로", "artificial:인공적인", "sophisticated:정교한", "algorithm:알고리즘", "enormous:막대한", "volume:양/부피", "understand:이해하다", "interpret:해석하다", "generate:생성하다", "🍎"] },
+        { en: "Deep learning techniques, specifically neural networks, are typically used in the construction of LLMs in order to process and learn from massive volumes of data.", ko: "대규모 양의 데이터를 처리하고 학습하기 위해, LLM을 구축할 때는 일반적으로 딥러닝 기술, 구체적으로는 인공신경망이 사용된다.", voca: ["technique:기술/기법", "specifically:구체적으로", "neural network:신경망", "typically:일반적으로", "construction:구축/건설", "in order to:~하기 위해", "process:처리하다", "massive:거대한/대규모의", "🍎", "🍎"] },
+        { en: "LLMs must be fundamentally trained on a large volume of data, typically measured in petabytes.", ko: "LLM은 근본적으로 보통 페타바이트 단위로 측정되는 대용량의 데이터로 학습되어야만 한다.", voca: ["fundamentally:근본적으로", "trained:훈련된/학습된", "typically:보통/일반적으로", "measured:측정되는", "petabyte:페타바이트", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Large strings of numbers, referred to as “weights” or “parameters,” combined with code that decodes and applies the numbers make up machine learning models.", ko: '“가중치” 또는 “매개변수”라고 불리는 거대한 일련의 숫자들은 그 숫자를 해독하고 적용하는 코드와 결합하여 머신러닝 모델을 구성한다.', voca: ["string:줄/일련", "referred to as:~라 불리는", "weight:가중치", "parameter:매개변수", "combined with:~와 결합된", "decode:해독하다", "apply:적용하다", "make up:구성하다", "🍎", "🍎"] },
+        { en: "The data that models learn from is not stored in or contained in the models themselves.", ko: "모델이 학습하는 데이터는 모델 자체의 내부 전용 공간에 저장되거나 포함되어 있지 않다.", voca: ["learn from:~로부터 배우다", "stored:저장된", "contained:포함된", "themselves:그들 자신", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Rather, certain numbers within a model adjust slightly in response to new information as it gains knowledge.", ko: "그보다는 모델이 지식을 얻음에 따라 새로운 정보에 반응하여 모델 내부의 특정 숫자들이 조금씩 조정되는 것이다.", voca: ["rather:그보다/오히려", "certain:특정의/어떤", "within:~ 내부에", "adjust:조정되다", "slightly:조금/약간", "in response to:~에 반응하여", "gain:얻다/획득하다", "knowledge:지식", "🍎", "🍎"] },
+        { en: "Large language models require the successful development of several essential steps, which are involved in the training process.", ko: "거대 언어 모델은 학습 과정에 포함되는 몇 가지 필수적인 단계의 성공적인 개발을 필요로 한다.", voca: ["require:필요로 하다", "successful:성공적인", "development:개발", "several:몇 가지의", "essential:필수적인", "step:단계", "involved:포함된/관련된", "training:학습/훈련", "process:과정", "🍎"] },
+        { en: "Large-scale text data collection and preprocessing from a variety of sources, including books, articles, websites, and other textual corpora, usually marks the start of the process.", ko: "도서, 기사, 웹사이트 및 기타 텍스트 말뭉치를 포함한 다양한 출처로부터 대규모 텍스트 데이터를 수집하고 전처리하는 것이 보통 이 과정의 시작을 나타낸다.", voca: ["large-scale:대규모의", "collection:수집", "preprocessing:전처리", "variety of:다양한", "source:출처/근원", "article:기사", "corpora:말뭉치들", "usually:보통/대개", "mark:나타내다/표시하다", "start:시작"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>How LLMs Work & Train</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: LLM의 정의와 기반 기술</span><div class="struct-text">거대 언어 모델(LLM)은 정교한 알고리즘과 대규모 데이터를 바탕으로 인간의 언어를 다루는 강력한 AI 시스템이며, 주로 딥러닝과 인공신경망 기술을 기반으로 구축됩니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 모델의 내부 작동 방식 (원리)</span><div class="struct-text">LLM은 대량의 데이터를 내부에 직접 저장하지 않습니다. 대신 가중치(weights)와 매개변수(parameters)라 불리는 수많은 숫자가 새로운 데이터에 반응하여 미세하게 조정되면서 지식을 습득합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: LLM 학습의 시작 단계</span><div class="struct-text">성공적인 모델 개발을 위해서는 여러 필수적인 훈련 단계들이 요구되는데, 그 시작점은 바로 다양한 출처(도서, 웹사이트 등)로부터 대규모 텍스트 데이터를 수집하고 전처리하는 것입니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">거대 언어 모델(LLM)의 작동 원리와 데이터 전처리를 포함한 학습 프로세스</span><span class="topic-eng">The operational principles of LLMs and their training process starting with data preprocessing.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function handleNext() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { window.location.href = '../../index.html'; } }
+    function handlePrev() { if (currentIdx > 0) { currentIdx--; render(); } else { window.location.href = '../../index.html'; } }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank'; sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) { sp.classList.add('revealed'); sp.style.borderBottomColor = 'transparent'; }
+            sp.onclick = function() { this.classList.add('revealed'); this.style.borderBottomColor = 'transparent'; playTTS(w.replace(/[.,'"]/g, "")); };
+            c.appendChild(sp);
+        });
+    }
+    
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

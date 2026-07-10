@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - The History and Evolution of Trade</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - History of Trade</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="handlePrev()">PREV</button>
+        <button class="btn-next" onclick="handleNext()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Trade is an inevitable activity of human existence. In all periods, people have engaged in transactions that involve the exchange of goods, services, and ideas.", ko: "무역은 인간 생존에 있어 필연적인 활동이다. 모든 시기에 걸쳐 사람들은 재화, 서비스, 그리고 아이디어의 교환을 포함하는 거래에 참여해 왔다.", voca: ["inevitable:필연적인", "existence:생존/존재", "engage in:~에 참여하다", "transaction:거래", "involve:포함하다", "exchange:교환", "goods:재화/상품", "service:서비스", "idea:아이디어", "🍎"] },
+        { en: "Not only has trade helped societies adapt their responses to risk and uncertainty but it has also played a central role in intergroup relations be they cordial or predatory.", ko: "무역은 사회가 위험과 불확실성에 대한 반응을 조정하도록 도왔을 뿐만 아니라, 집단 간의 관계가 우호적이든 약탈적이든 그 관계에서 중심적인 역할을 해왔다.", voca: ["adapt:조정하다/적응시키다", "response:반응", "risk:위험", "uncertainty:불확실성", "central role:중심적 역할", "intergroup:집단 간의", "relation:관계", "cordial:우호적인", "predatory:약탈적인", "🍎"] },
+        { en: "Long before the invention of money for private exchange, elements of trade formed part of the earliest human interactions.", ko: "사적인 교환을 위한 화폐가 발명되기 훨씬 전부터, 무역의 요소들은 초기 인류 상호작용의 일부분을 형성했다.", voca: ["invention:발명", "money:화폐/돈", "private:사적인", "element:요소", "form:형성하다", "earliest:초기의/가장빠른", "interaction:상호작용", "🍎", "🍎", "🍎"] },
+        { en: "Among prehistoric people, goods, services, and ideas were exchanged as gifts, tributes, or as part of a barter economy.", ko: "선사 시대 사람들 사이에서 재화, 서비스, 아이디어는 선물, 공물, 또는 물물교환 경제의 일부로서 교환되었다.", voca: ["among:~ 사이에서", "prehistoric:선사 시대의", "gift:선물", "tribute:공물", "barter:물물교환", "economy:경제", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Beyond early hunter-gatherer communities which strove to maintain self-sufficiency, long-distance trade could be found.", ko: "자급자족을 유지하려고 노력했던 초기 수렵 채집인 공동체를 넘어, 먼 거리 간의 원거리 무역도 발견될 수 있었다.", voca: ["beyond:~을 넘어서", "hunter-gatherer:수렵 채집인", "community:공동체", "strive:노력하다/분투하다", "maintain:유지하다", "self-sufficiency:자급자족", "long-distance:원거리의", "found:발견된", "🍎", "🍎"] },
+        { en: "Indeed, since its beginnings in the Palaeolithic and Neolithic periods, the impulse to trade has developed, eventually fueling immense civilisations and empires.", ko: "실제로 구석기 시대와 신석기 시대에 시작된 이래로 무역에 대한 충동은 발전해 왔으며, 결국 거대한 문명과 제국을 성장시키는 원동력이 되었다.", voca: ["indeed:실제로/참으로", "beginning:시작", "Palaeolithic:구석기 시대의", "Neolithic:신석기 시대의", "impulse:충동", "develop:발전하다", "eventually:결국", "fuel:원동력이 되다/연료를 공급하다", "immense:거대한", "civilisation:문명"] },
+        { en: "It was the development of maritime trade connecting the Mediterranean, Indian Ocean, and South China Sea, along with the creation of the Silk Road, that established what we recognise today as the foundations of the world’s modern commercial and trading systems.", ko: "오늘날 우리가 세계의 현대 상업 및 무역 시스템의 기반으로 인식하는 것을 확립한 것은 바로 실크로드의 창설과 더불어 지중해, 인도양, 남중국해를 연결하는 해상 무역의 발전이었다.", voca: ["maritime:해상의/바다의", "connect:연결하다", "Mediterranean:지중해", "Indian Ocean:인도양", "South China Sea:남중국해", "along with:~와 더불어", "creation:창설/창조", "establish:확립하다", "foundation:기반/토대", "commercial:상업적인"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Evolution of Human Trade</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 무역의 필연성과 본질적 역할</span><div class="struct-text">무역은 인류 생존에 있어 필연적인 활동으로, 시대와 상관없이 재화·서비스·아이디어를 교환해 왔습니다. 이는 위험과 불확실성을 관리하고 집단 간의 관계(우호적이든 약탈적이든)를 형성하는 중심 역할을 했습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 화폐 이전 선사 시대의 원시 무역</span><div class="struct-text">화폐가 발명되기 훨씬 전부터 무역은 인류 상호작용의 일부였습니다. 선사 시대에는 선물, 공물, 물물교환 경제 형태로 교환이 이루어졌으며, 자급자족을 하던 초기 수렵 채집 사회를 넘어 이미 원거리 무역이 존재했습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 거대 문명의 발전과 현대 무역의 기반</span><div class="struct-text">구석기·신석기 시대부터 이어진 무역의 충동은 거대 문명과 제국을 번성하게 했습니다. 이후 실크로드의 개척과 지중해·인도양·남중국해를 잇는 해상 무역의 발달이 오늘날 현대 상업·무역 시스템의 튼튼한 토대가 되었습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">인류 역사와 함께 발달한 무역의 역사적 변천과 현대 상업 시스템의 확립 과정</span><span class="topic-eng">The historical evolution of human trade and how it established the foundations of the modern commercial system.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function handleNext() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { window.location.href = '../../index.html'; } }
+    function handlePrev() { if (currentIdx > 0) { currentIdx--; render(); } else { window.location.href = '../../index.html'; } }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank'; sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) { sp.classList.add('revealed'); sp.style.borderBottomColor = 'transparent'; }
+            sp.onclick = function() { this.classList.add('revealed'); this.style.borderBottomColor = 'transparent'; playTTS(w.replace(/[.,'"]/g, "")); };
+            c.appendChild(sp);
+        });
+    }
+    
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

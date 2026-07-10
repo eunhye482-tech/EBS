@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - Body Temperature and Internal Clocks</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - Internal Clocks</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="handlePrev()">PREV</button>
+        <button class="btn-next" onclick="handleNext()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "There is some evidence that cooler body temperatures can cause people’s internal clocks to click at a slower rate.", ko: "더 낮은 체온이 사람들의 내부 시계가 더 느린 속도로 가도록 만들 수 있다는 몇 가지 증거가 있다.", voca: ["evidence:증거", "cooler:더 낮은/더 차가운", "body temperature:체온", "internal clock:내부 시계", "click:(시계가) 가다/깍깍거리다", "slower rate:더 느린 속도", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "One experiment found that divers immersed in 39-degree sea water estimated a 60-second interval to pass more than 10 percent faster than they did before entering the water.", ko: "한 실험은 화씨 39도(섭씨 약 4도)의 바닷물에 들어간 잠수부들이 60초의 시간 간격이 물에 들어가기 전보다 10퍼센트 이상 더 빨리 지나간다고 추정했다는 것을 발견했다.", voca: ["experiment:실험", "diver:잠수부", "immersed in:~에 담겨진", "sea water:바닷물", "estimate:추정하다", "interval:간격", "pass:지나다/경과하다", "enter:들어가다", "🍎", "🍎"] },
+        { en: "Other studies have found that people with high fevers perceive the clock to move more slowly than it actually does (they overestimate intervals of time).", ko: "다른 연구들은 고열이 있는 사람들이 시계가 실제보다 더 느리게 움직인다고 인지한다(그들은 시간 간격을 과대평가한다)는 것을 발견했다.", voca: ["study:연구", "high fever:고열", "perceive:인지하다/지각하다", "actually:실제로", "overestimate:과대평가하다", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "These findings raise the possibility that people in warmer places are operating on slower internal clocks.", ko: "이러한 연구 결과들은 더 따뜻한 지역에 사는 사람들이 더 느린 내부 시계에 따라 움직이고 있을 가능성을 제기한다.", voca: ["finding:연구 결과/발견", "raise:제기하다", "possibility:가능성", "warmer place:더 따뜻한 지역", "operate:움직이다/작동하다", "slower:더 느린", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This would, in turn, cause the speed of events to seem faster to them, perhaps explaining why their actual temporal norms are kept slower.", ko: "이것은 결과적으로 그들에게 사건의 속도가 더 빠르게 느껴지도록 만들 것이며, 어쩌면 그들의 실제 시간적 규범이 더 느리게 유지되는 이유를 설명해 줄 것이다.", voca: ["in turn:결과적으로/차례로", "cause:유발하다/만들다", "speed:속도", "event:사건", "seem:~처럼 보이다/느껴지다", "explain:설명하다", "actual:실제의", "temporal norm:시간적 규범", "kept:유지되는", "🍎"] },
+        { en: "In other words, in terms of their own internal metronomes, there may be little or no difference in the subjective tempo experienced by people in hotter and colder climates.", ko: "다시 말해서, 그들 자신의 내부 메트로놈의 관점에서는, 더 뜨거운 기후와 더 차가운 기후의 사람들이 경험하는 주관적인 템포에 차이가 거의 없거나 전혀 없을 수도 있다.", voca: ["in other words:다시 말해서", "in terms of:~의 관점에서", "metronome:메트로놈", "little or no:거의 없거나 전혀 없는", "difference:차이", "subjective:주관적인", "tempo:템포/속도", "experience:경험하다", "climate:기후", "🍎"] },
+        { en: "The tempo in both cases may seem just right.", ko: "두 경우 모두 템포가 아주 적당하다고 느껴질지도 모른다.", voca: ["case:경우", "both:양쪽의/둘 다", "seem:~해 보이다", "just right:아주 적당한/딱 맞는", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Temperature and Internal Clocks</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 체온과 내부 시계 속도의 상관관계</span><div class="struct-text">낮은 체온이 인간의 내부 생체 시계를 더 느리게 가도록 만든다는 증거가 있습니다. 차가운 물속의 잠수부들은 시간이 실제보다 더 빨리 지나간다고 체감(내부 시계가 느려져 외부 시간이 빠르게 느껴짐)했습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 고열 환자와 더 따뜻한 기후의 예시</span><div class="struct-text">반대로 몸에 열이 많이 나는 고열 환자들은 내부 시계가 빨라져, 실제 시계가 아주 느리게 움직인다고 시간 간격을 과대평가합니다. 이 원리를 적용하면, 더 따뜻한 기후에 사는 사람들은 평소에 '더 느린 내부 시계'로 작동하고 있을 가능성이 큽니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 기후별 주관적 시간 체감의 일치</span><div class="struct-text">내부 시계가 느리면 외부의 변화나 사회적 규범이 상대적으로 더 빠르게 느껴집니다. 결과적으로 더운 지역과 추운 지역의 사람들이 느끼는 '주관적인 삶의 속도(템포)'는 각자의 내부 메트로놈 기준에 맞춰져 있으므로, 양쪽 모두에게 자기 지역의 템포가 '딱 적당하다'고 느껴집니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">체온 및 기후 변화가 인간의 생체 내부 시계와 주관적인 시간 속도 인지에 미치는 영향</span><span class="topic-eng">The influence of body temperature and climate on human internal clocks and subjective perception of time.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function handleNext() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { window.location.href = '../../index.html'; } }
+    function handlePrev() { if (currentIdx > 0) { currentIdx--; render(); } else { window.location.href = '../../index.html'; } }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank'; sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) { sp.classList.add('revealed'); sp.style.borderBottomColor = 'transparent'; }
+            sp.onclick = function() { this.classList.add('revealed'); this.style.borderBottomColor = 'transparent'; playTTS(w.replace(/[.,'"]/g, "")); };
+            c.appendChild(sp);
+        });
+    }
+    
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

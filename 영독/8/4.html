@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - Last Chance & Over-tourism</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - EBS 8-4</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="handlePrev()">PREV</button>
+        <button class="btn-next" onclick="handleNext()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Recognizing changes in the natural world caused in part or entirely due to human activities—such as climate change, pollution and habitat loss—tourists are pursuing what is referred to as “last chance” tourism.", ko: "기후 변화, 오염, 서식지 상실과 같은 인간의 활동으로 인해 부분적으로 또는 전적으로 발생한 자연계의 변화를 인식하면서, 관광객들은 “마지막 기회” 관광이라고 불리는 것을 추구하고 있다.", voca: ["recognize:인식하다", "caused by:~로 유발된", "entirely:전적으로", "human activity:인간 활동", "pollution:오염", "habitat loss:서식지 상실", "pursue:추구하다", "referred to as:~라 불리는", "last chance:마지막 기회", "🍎"] },
+        { en: "Last chance tourism is travel motivated by the desire to see threatened or diminishing natural attractions, including glaciers, coral reefs and endangered species.", ko: "마지막 기회 관광은 빙하, 산호초, 멸종 위기 종을 포함하여 위협받거나 감소하고 있는 자연 명소를 보고 싶어 하는 욕구에 의해 동기가 부여된 여행이다.", voca: ["motivated:동기가 부여된", "desire:욕구/갈망", "threatened:위협받는", "diminishing:줄어드는", "attraction:명소/인기끄는곳", "glacier:빙하", "coral reef:산호초", "endangered:멸종위기의", "species:종(생물)", "🍎"] },
+        { en: "Locations featuring these attractions may continue to experience heightened visitation, simultaneously creating opportunities for increased awareness and resource protection as well as increased risk of over-tourism.", ko: "이러한 명소들을 특징으로 하는 지역들은 계속해서 늘어난 방문을 경험할 수 있으며, 이는 환경 인식 제고 및 자원 보호의 기회를 만드는 동시에 오버투어리즘(과잉 관광)의 위험 증가를 야기한다.", voca: ["feature:특징으로 하다", "heightened:고조된/늘어난", "visitation:방문", "simultaneously:동시에", "awareness:인식", "protection:보호", "risk:위험", "over-tourism:과잉 관광", "🍎", "🍎"] },
+        { en: "Over-tourism is acknowledged as a major threat to the industry.", ko: "오버투어리즘은 관광 산업에 대한 주요 위협으로 인정받고 있다.", voca: ["acknowledge:인정하다", "major:주요한", "threat:위협", "industry:산업", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Over-tourism describes the tipping point where the costs of tourism outweigh the benefits for local communities due to overcrowding or poor management.", ko: "오버투어리즘은 혼잡이나 부실한 관리로 인해 관광의 대가(손실)가 지역 사회의 이익보다 커지는 한계점(티핑 포인트)을 설명한다.", voca: ["describe:설명하다", "tipping point:티핑 포인트", "cost:비용/대가", "outweigh:~보다 크다", "benefit:이익", "local community:지역사회", "overcrowding:혼잡/과밀", "management:관리", "🍎", "🍎"] },
+        { en: "If not managed properly, over-tourism is a threat to sustainable tourism development.", ko: "적절히 관리되지 않으면, 오버투어리즘은 지속 가능한 관광 발전에 위협이 된다.", voca: ["properly:적절히", "sustainable:지속 가능한", "development:발전", "threat:위협", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The growing concern for over-tourism offers opportunities for tourism professionals to implement sustainability best practices and improve site-specific sustainable destination-level management plans.", ko: "오버투어리즘에 대한 고조되는 우려는 관광 전문가들이 지속 가능성의 우수 사례를 실행하고 장소별 특화된 지속 가능한 목적지 수준의 관리 계획을 개선할 기회를 제공한다.", voca: ["concern:우려/걱정", "professional:전문가", "implement:실행하다", "best practice:우수 사례", "improve:개선하다", "site-specific:장소별특화된", "destination:목적지", "🍎", "🍎", "🍎"] },
+        { en: "Over-tourism is a complex trend in the travel industry and calls upon destination managers to engage with all sectors and stakeholders involved in tourism towards long-term, fact-based planning to mitigate over-tourism.", ko: "오버투어리즘은 관광 산업의 복잡한 경향이며, 목적지 관리자들에게 오버투어리즘을 완화하기 위한 장기적이고 사실에 기반한 계획을 향해 관광에 참여하는 모든 부문 및 이해관계자들과 협력할 것을 요구한다.", voca: ["complex:복잡한", "trend:경향/추세", "call upon:요구하다", "engage with:~와 협력하다", "sector:부문/분야", "stakeholder:이해관계자", "involved in:~에 관련된", "fact-based:사실에 기반한", "mitigate:완화시키다", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Last Chance & Over-tourism</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 마지막 기회(Last Chance) 관광의 대두</span><div class="struct-text">인간의 활동으로 파괴되어가는 자연(빙하, 산호초 등)이 사라지기 전에 직접 보려는 욕구로 인해 '마지막 기회 관광'이 큰 인기를 끌고 있습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 오버투어리즘의 개념과 파급력</span><div class="struct-text">이로 인한 방문객 급증은 자원 보호의 기회가 되기도 하지만 '오버투어리즘(과잉 관광)'을 유발합니다. 오버투어리즘은 관광으로 인한 손실이 지역 사회의 이익을 넘어서는 순간을 뜻하며, 지속 가능한 관광을 방해합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 위기를 관리할 기회와 해결 과제</span><div class="struct-text">하지만 오버투어리즘에 대한 걱정은 전문가들이 새로운 상생 관리 계획을 세울 기회가 됩니다. 복잡한 문제를 해결하기 위해 목적지 관리자는 모든 분야 및 이해관계자와 협력하여 철저한 장기 계획을 설계해야 합니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">'마지막 기회 관광'이 초래한 오버투어리즘의 위기와 이를 해결하기 위한 다각적 협력 관리</span><span class="topic-eng">The crisis of over-tourism fueled by "last chance" tourism and the need for strategic destination management.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function handleNext() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { window.location.href = '../../index.html'; } }
+    function handlePrev() { if (currentIdx > 0) { currentIdx--; render(); } else { window.location.href = '../../index.html'; } }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank'; sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) { sp.classList.add('revealed'); sp.style.borderBottomColor = 'transparent'; }
+            sp.onclick = function() { this.classList.add('revealed'); this.style.borderBottomColor = 'transparent'; playTTS(w.replace(/[.,'"]/g, "")); };
+            c.appendChild(sp);
+        });
+    }
+    
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

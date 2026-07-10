@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master - Why Employees Become Founders</title>
+    <style>
+        :root { 
+            --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; 
+            --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; align-items: stretch; height: 80px; box-sizing: border-box; }
+        .btn-prev { background: #F5F5F5; color: #718096; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; flex: 1; display: flex; align-items: center; justify-content: center; }
+        .main-title-card { width: auto; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .topic-title { font-weight: bold; color: #D81B60; font-size: 0.85rem; display: block; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; line-height: 1.5; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; line-height: 1.4; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .btn-start-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master - Why Workers Leave</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="handlePrev()">PREV</button>
+        <button class="btn-next" onclick="handleNext()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Employees tend to leave companies to become founders when their employers’ growth rates begin to fall, reducing the attractiveness of staying there and the opportunity costs of becoming founders.", ko: "직원들은 고용주의 성장률이 떨어지기 시작할 때 회사를 떠나 창업자가 되는 경향이 있는데, 이는 회사에 머무는 매력도를 낮추고 창업자가 되는 기회비용을 줄여주기 때문이다.", voca: ["tend to:~하는 경향이 있다", "founder:창업자/설립자", "employer:고용주/회사", "growth rate:성장률", "reduce:줄이다/낮추다", "attractiveness:매력/인기", "opportunity cost:기회비용", "🍎", "🍎", "🍎"] },
+        { en: "The likelihood of an employee leaving to become a founder has also been linked to the employee’s own performance.", ko: "직원이 떠나서 창업자가 될 가능성은 그 직원 자신의 업무 성과와도 연관되어 있다.", voca: ["likelihood:가능성/확률", "performance:성과/실적", "linked to:~와 연관된", "own:자신의", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Employees whose performance was in the middle of the distribution were the least likely to leave;", ko: "성과 분포의 중간에 위치한 직원들이 회사를 떠날 가능성이 가장 낮았다.", voca: ["middle:중간", "distribution:분포", "least likely:가장 ~할 것 같지 않은", "leave:떠나다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "the most likely were the poor-performing employees (the “slugs” whose pay wasn’t high and who had the least to lose by leaving to found a startup)", ko: "떠날 가능성이 가장 높은 이들은 성과가 낮은 직원들(임금이 높지 않아 스타트업을 창업하기 위해 떠나도 잃을 것이 가장 적은 '민달팽이' 유형)과", voca: ["poor-performing:성과가 낮은", "slug:민달팽이", "pay:임금/급여", "least to lose:잃을 것이 가장 적은", "found:창업하다", "startup:스타트업/신생기업", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "and the high-performing employees (the “stars” who had the potential to earn high wages by becoming self-employed).", ko: "성과가 높은 직원들(자영업을 함으로써 높은 임금을 벌 수 있는 잠재력을 가진 '스타' 유형)이었다.", voca: ["high-performing:성과가 높은", "star:스타/우수직원", "potential:잠재력", "earn:벌다", "wage:임금/급여", "self-employed:자영업의", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Although high-paid employees may be less likely than lower-paid employees to walk away from their salaries,", ko: "고임금 직원들은 저임금 직원들보다 자신의 급여를 버리고 떠날 가능성이 더 낮을 수 있지만,", voca: ["although:비록 ~일지라도", "high-paid:고임금을 받는", "lower-paid:저임금을 받는", "walk away from:~을 버리고 떠나다", "salary:급여/월급", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "if they have saved a high percentage of their earnings over the years, that nest egg may make them more likely to make the leap than if they hadn’t saved.", ko: "그들이 수년간 수입의 높은 비율을 저축해 왔다면, 그 밑천(비상금)이 저축하지 않았을 때보다 창업이라는 도약을 할 가능성을 더 높여줄 수 있다.", voca: ["save:저축하다", "percentage:비율", "earning:수입/소득", "over the years:수년간", "nest egg:밑천/비상금", "make the leap:도약을 하다", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Why Workers Turn Into Founders</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 도입: 창업을 결심하는 외부 환경 요인</span><div class="struct-text">회사의 성장률이 둔화되면 직원의 잔류 매력이 떨어지고 창업의 기회비용이 감소하여 퇴사 후 창업을 결심하는 경향이 생깁니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 성과 분포에 따른 창업 가능성 차이</span><div class="struct-text">창업 확률은 직원의 성과 수준에 따라 달라집니다. 중간층이 가장 안정적이라 이직/창업 확률이 낮고, 양극단의 직원들이 잘 떠납니다. 잃을 게 없는 '저성과자(Slugs)'와 자영업 잠재력이 높은 '고성과자(Stars)'가 가장 쉽게 창업 전선에 뛰어듭니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 고임금 직원의 창업을 돕는 저축(밑천)</span><div class="struct-text">고임금 직원은 안정적인 급여를 포기하기 어렵지만, 수년간 착실히 모아둔 비상금(Nest egg)이나 자본 밑천이 있다면 자금력이 바탕이 되어 과감하게 창업이라는 도약을 선택할 확률이 높아집니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-title">📌 Topic (주제)</span><span class="topic-kor">기업 성장률 저하, 개인의 업무 성과 및 저축 수준이 직원의 창업 결심에 미치는 영향</span><span class="topic-eng">The factors influencing employees' decisions to leave and found startups, including company growth, performance types, and savings.</span></div>
+                <button class="btn-start-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-start-next" style="background:#FFF59D; color:#5D4037; border:2px solid #FBC02D;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+
+    function handleNext() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { window.location.href = '../../index.html'; } }
+    function handlePrev() { if (currentIdx > 0) { currentIdx--; render(); } else { window.location.href = '../../index.html'; } }
+
+    function fillVoca(v) { const c = document.getElementById('voca-area'); for(let i=0; i<10; i++){ const d = document.createElement('div'); d.className = 'voca-item'; if(v[i] && v[i] !== '🍎'){ const [e,k]=v[i].split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎'; d.style.color="#FF3B30"; d.style.cursor="default"; } c.appendChild(d); } }
+    
+    function fillBlanks(s) {
+        const c = document.getElementById('blank-area');
+        const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+        s.split(' ').forEach(w => {
+            const sp = document.createElement('span');
+            sp.className = 'word-blank'; sp.innerText = w;
+            const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+            if (prepositions.includes(pureWord)) { sp.classList.add('revealed'); sp.style.borderBottomColor = 'transparent'; }
+            sp.onclick = function() { this.classList.add('revealed'); this.style.borderBottomColor = 'transparent'; playTTS(w.replace(/[.,'"]/g, "")); };
+            c.appendChild(sp);
+        });
+    }
+    
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>
